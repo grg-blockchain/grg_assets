@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "doc": "apidoc -i app/ -o docs",
     "start": "nodemon app.js",
     "prd": "pm2 start app.js"
   },
   "dependencies": {
+    "apidoc": "^0.17.7",
     "config": "^3.2.2",
     "debug": "^2.6.3",
     "ioredis": "^4.14.0",
@@ -19,10 +21,13 @@
     "koa-router": "^7.1.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
+    "lodash": "^4.17.15",
+    "log4js": "^5.0.0",
     "mysql": "^2.17.1",
     "mysql2": "^1.6.5",
     "pug": "^2.0.0-rc.1",
-    "sequelize": "^5.16.0"
+    "sequelize": "^5.16.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"

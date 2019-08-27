@@ -9,23 +9,20 @@ const http = require('http');
 const router = require('./app/router');
 const config = require('config');
 const port = config.get('port');
+const { queryAndBodyToParam } = require('./app/middleware');
 require('./config/initializer');
 
 // error handler
 onerror(app)
 
 // middlewares
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
+// app.use(bodyparser({
+//   enableTypes:['json', 'form', 'text']
+// }))
+app.use(bodyparser({}))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
-
-app.use(views(__dirname + '/views', {
-  extension: 'pug'
-}))
-
+app.use(queryAndBodyToParam)
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()
