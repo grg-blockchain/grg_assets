@@ -36,7 +36,7 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 ";
 
-echo "create t_operate_score_rule";
+echo "create t_operate_token_rule";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_operate_score_rule (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id ',
 	rule_key VARCHAR(64) NOT NULL COMMENT '配置项名字',
