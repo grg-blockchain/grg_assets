@@ -1,10 +1,11 @@
 const User = require('./controller/user');
 const router = require('koa-router')({prefix: '/api/v1', sensitive: true});
-const {opRecord} = require('./middleware')
+const {opRecord, ResponseFormatter} = require('./middleware')
 
+router.use('/', ResponseFormatter('^/api'));
 
-
-// router.get('/user', opRecord, User.info);
+router.get('/user', opRecord, User.info);
+router.get('/user/logout', opRecord, User.logout);
 
 /**
  * 商户注册
@@ -61,7 +62,7 @@ router.post('/user/register', opRecord, User.register);
  *      "code": 0,
  *      "msg": "登陆成功",
  *      "data": {
- *          "userId": "xxxxxxxxxxxxxxxx"
+ *          "uid": "xxxxxxxxxxxxxxxx"
  *      }
  *    }
  * @apiGroup User
