@@ -6,13 +6,13 @@ const Sequelize = require('sequelize');
 
 // 创建 Model
 let SpInfo = sequelize.define('spInfo', {
-    // 指定映射的字段类型，字段名，例如数据库中 user 表中的 username 字段映射成 username
-    username: {
+    name: {
       type: Sequelize.STRING,
-      field: 'username'
     },
-    // 如果不指定 field，会自动映射相同名称的字段
-    email: {
+    mobile: {
+      type: Sequelize.STRING
+    },
+    loginPassword: {
       type: Sequelize.STRING
     }
   }, {

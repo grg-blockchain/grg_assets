@@ -62,12 +62,12 @@ router.post('/user/register', opRecord, User.register);
  *      "code": 0,
  *      "msg": "登陆成功",
  *      "data": {
- *          "uid": "xxxxxxxxxxxxxxxx"
+ *          "spUid": "xxxxxxxxxxxxxxxx"
  *      }
  *    }
  * @apiGroup User
  */
-router.post('/user/login', opRecord, User.login);
+router.post('/user/login', User.login);
 
 
 /**
@@ -88,16 +88,25 @@ router.post('/user/login', opRecord, User.login);
  *              "bankCard": "xxxxxxxxxxxxxxxxxx"
  *          },
  *          "sumbitHistory": [
- *              {"bank": "平安银行", "bankCard": "xxxxxxxxxxxxxxxxxx", "quota": 10000, "date": "2019-09-01 08:00:00", "state": "pass"},
- *              {"bank": "平安银行", "bankCard": "xxxxxxxxxxxxxxxxxx", "quota": 20000, "date": "2019-09-02 08:00:00", "state": "fail"}
+ *              {
+ *                  "bank": "平安银行", 
+ *                  "bankCard": "xxxxxxxxxxxxxxxxxx",  //银行卡号码
+ *                  "quota": 10000,                    //转账金额，元作为单位
+ *                  "date": "2019-09-01 08:00:00",     //转账时间
+ *                  "state": "pass"                    //审核状态
+ *              },
+ *              {
+ *                  "bank": "平安银行", 
+ *                  "bankCard": "xxxxxxxxxxxxxxxxxx", 
+ *                  "quota": 20000, 
+ *                  "date": "2019-09-02 08:00:00", 
+ *                  "state": "fail"}
  *          ]
  *      }
  *    }
  * @apiGroup Guaranty
  */
 router.get('/guaranty/getDetail', opRecord)
-
-
 
 /**
  * @api {POST} /guaranty/submit 担保金提交申请
@@ -124,7 +133,7 @@ router.get('/guaranty/getDetail', opRecord)
 router.post('/guaranty/submit', opRecord)
 
 /**
- * @api {POST} /token/approve 商户发行数字资产
+ * @api {POST} /asset/approve 商户发行数字资产
  * @apiDescription 商户发行数字资产
  * @apiName approve
  * @apiParam {String} spUid 发行商户user id
@@ -133,19 +142,36 @@ router.post('/guaranty/submit', opRecord)
  * @apiParam {String} desc 资产描述描述
  * @apiParam {Number} supply 发行量
  * @apiParam {Number} price 资产单价
- * @apiParam {String} state 数字资产状态
  * @apiSuccessExample {json} Success-Response:
  *    HTTP/1.1 200 OK
  *    {
  *      "code": 0
  *      "msg": "数字资产发行成功"
  *    }
- * @apiGroup Token
+ * @apiGroup Asset
  */
-router.post('/token/approve', opRecord)
+router.post('/asset/approve', opRecord)
+
 
 /**
- * @api {GET} /token/list 获取商户数字资产列表
+ * @api {POST} /asset/setSupply 数字资产发行量修改
+ * @apiDescription 数字资产发行量修改
+ * @apiName setSupply
+ * @apiParam {String} spUid 发行商户user id
+ * @apiParam {String} assetId 资产ID
+ * @apiParam {Number} supply 发行量
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "code": 0
+ *      "msg": "发行量修改成功"
+ *    }
+ * @apiGroup Asset
+ */
+router.post('/asset/setSupply', opRecord)
+
+/**
+ * @api {GET} /asset/list 获取商户数字资产列表
  * @apiDescription 获取商户数字资产列表
  * @apiName list
  * @apiParam {String} spUid 发行商户user id
@@ -157,18 +183,63 @@ router.post('/token/approve', opRecord)
  *      "code": 0
  *      "data": {
  *          "list": [
- *              {"name": "通用电影票", "supply": 10000, "date": "2019-09-01 08:00:00", "state": "", "assetId": "xxxxxxx001"},
- *              {"name": "麦当劳通用券", "supply": 10000, "date": "2019-09-01 08:00:00", "state": "", "assetId": "xxxxxxx002"}
+ *              {
+ *                  "name": "通用电影票",             //资产名字
+ *                  "supply": 10000,                //资产发行量
+ *                  "date": "2019-09-01 08:00:00",  //资产发行时间
+ *                  "state": "",                    //资产状态
+ *                  "assetId": "xxxxxxx001"         //资产ID
+ *              },
+ *              {
+ *                  "name": "麦当劳通用券",
+ *                  "supply": 10000,
+ *                  "date": "2019-09-01 08:00:00",
+ *                  "state": "",
+ *                  "assetId": "xxxxxxx002"
+ *              }
  *          ]
  *      }
  *    }
- * @apiGroup Token
+ * @apiGroup Asset
  */
-router.get('/token/list', opRecord)
+router.get('/asset/list', opRecord)
 
 
 /**
- * @api {GET} /token/:assetId/getDetail 获取商户资产明细
+ * @api {GET} /transaction/list 获取交易列表
+ * @apiDescription 获取交易列表
+ * @apiName list
+ * @apiParam {String} spUid 发行商户user id
+ * @apiParam {String} name 资产名字，可不填
+ * @apiParam {String} assetId 资产ID，可不填
+ * @apiParam {String} startDate 交易时间段，可不填
+ * @apiParam {String} endDate 交易时间段，可不填
+ * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
+ * @apiSuccess {String} message  提示信息
+ * @apiSuccess {Object} data   返回结果
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "code": 0
+ *      "data": {
+ *          "transactionHistory": [
+ *              {
+ *                  "assetId": "xxxxxxxxxxxx"      //资产id
+ *                  "name": "通用电影票",            //资产名字
+ *                  "nodeId": "xxxxxxxx001",       //用户id
+ *                  "date": "2019-09-01 08:00:00"  //交易时间
+ *                  "num": 1,                      //交易笔数
+ *                  "type": "send"                //交易类型 send: 商户发送给用户，receive: 用户消费兑换
+ *              }
+ *          ]
+ *      }
+ *    }
+ * @apiGroup Transaction
+ */
+router.get('/transaction/list', opRecord)
+
+/**
+ * @api {GET} /asset/:assetId/getDetail 获取商户资产明细
  * @apiDescription 获取商户资产明细
  * @apiName getDetail
  * @apiParam {String} spUid 发行商户user id
@@ -181,25 +252,29 @@ router.get('/token/list', opRecord)
  *      "code": 0
  *      "data": {
  *          "name": "通用电影票", 
- *          "supply": 10000, 
- *          "date": "2019-09-01 08:00:00", 
- *          "price": 1, 
- *          "remainingSupply": 5000,
- *          "circulatingSupply": 5000,
- *          "state": "", 
- *          "assetId": "xxxxxxx001",
+ *          "supply": 10000,                //发行总量
+ *          "date": "2019-09-01 08:00:00",  //发行时间
+ *          "price": 1,                     //单价
+ *          "remainingSupply": 5000,        //剩余量
+ *          "circulatingSupply": 5000,      //流通量
+ *          "state": "",                    //资产状态
+ *          "assetId": "xxxxxxx001",        //资产ID
  *          "transactionHistory": [
- *              
+ *              {
+ *                  "nodeId": "xxxxxxxx001",       //用户id
+ *                  "date": "2019-09-01 08:00:00"  //交易时间
+ *                  "num": 1                       //交易笔数
+ *              }
  *          ]
  *      }
  *    }
- * @apiGroup Token
+ * @apiGroup Asset
  */
-router.get('/token/list', opRecord)
+router.get('/asset/:assetId/getDetail', opRecord)
 
 
 /**
- * @api {POST} /token/send 商户数字资产发送
+ * @api {POST} /asset/send 商户数字资产发送
  * @apiDescription 商户数字资产发送
  * @apiName send
  * @apiParam {String} spUid 发行商户user id
@@ -212,12 +287,12 @@ router.get('/token/list', opRecord)
  *      "code": 0
  *      "msg": "注册成功,请登陆"
  *    }
- * @apiGroup Token
+ * @apiGroup Asset
  */
-router.post('/token/send', opRecord)
+router.post('/asset/send', opRecord)
 
 /**
- * @api {POST} /token/receive 商户数字资产接收
+ * @api {POST} /asset/receive 商户数字资产接收
  * @apiDescription 商户数字资产接收
  * @apiName receive
  * @apiParam {String} mobile 手机号
@@ -229,12 +304,12 @@ router.post('/token/send', opRecord)
  *      "code": 0
  *      "msg": "注册成功,请登陆"
  *    }
- * @apiGroup Token
+ * @apiGroup Asset
  */
-router.post('/token/receive', opRecord)
+router.post('/asset/receive', opRecord)
 
 /**
- * @api {POST} /token/destory 商户数字资产销户
+ * @api {POST} /asset/destory 商户数字资产销户
  * @apiDescription 商户数字资产销户
  * @apiName destory
  * @apiParam {String} mobile 手机号
@@ -246,9 +321,9 @@ router.post('/token/receive', opRecord)
  *      "code": 0
  *      "msg": "注册成功,请登陆"
  *    }
- * @apiGroup Token
+ * @apiGroup Asset
  */
-router.post('/token/destory', opRecord)
+router.post('/asset/destory', opRecord)
 
 
 
