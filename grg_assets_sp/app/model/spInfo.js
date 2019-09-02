@@ -5,7 +5,7 @@ const { sequelize } = require('../../config/initializer');
 const Sequelize = require('sequelize');
 
 // 创建 Model
-let SpInfo = sequelize.define('spInfo', {
+let SpInfo = sequelize.define('t_sp_info', {
     name: {
       type: Sequelize.STRING,
     },
@@ -13,6 +13,21 @@ let SpInfo = sequelize.define('spInfo', {
       type: Sequelize.STRING
     },
     loginPassword: {
+      type: Sequelize.STRING
+    },
+    payPassword: {
+      type: Sequelize.STRING
+    },
+    simpleName: {
+      type: Sequelize.STRING
+    },
+    spType: {
+      type: Sequelize.STRING
+    },
+    info: {
+      type: Sequelize.JSON
+    },
+    state: {
       type: Sequelize.STRING
     }
   }, {

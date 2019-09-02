@@ -16,15 +16,18 @@ router.get('/user/logout', opRecord, User.logout);
  * @apiParam {String} loginPassword 登陆密码
  * @apiParam {String} payPassword 支付密码
  * @apiParam {String} name 商户名称
+ * @apiParam {String} spId 社会信用证号码
+ * @apiParam {String} simpleName 商户简称
+ * @apiParam {Number} spType 企业类型。【1】股份有限公司【2】有限责任公司
  * @apiParam {String} address 商户地址
- * @apiParam {String} registeredCapital 注册资金
+ * @apiParam {Number} registeredCapital 注册资金
  * @apiParam {String} establishmentDate 成立日期
  * @apiParam {String} businessTermBegin 营业期限起始日期，若无期限，则为0000-00-00 00:00:00
  * @apiParam {String} businessTermEnd 营业期限结束日期，若无期限，则为0000-00-00 00:00:00
- * @apiParam {String} businessTermEndless 
+ * @apiParam {String} businessTermEndless
  * @apiParam {String} businessScope 经营范围
  * @apiParam {String} businessCorporationName 企业法人代表姓名
- * @apiParam {String} businessCorporationCredentialType 企业法人证件类型, 【0】身份证
+ * @apiParam {Number} businessCorporationCredentialType 企业法人证件类型, 【0】身份证
  * @apiParam {String} businessCorporationCredentialNum 企业法人证件号
  * @apiParam {String} businessCorporationCredentialNumMobile 企业法人联系手机号
  * @apiParam {String} businessCorporationCredentialExpireDate 证件到期时间

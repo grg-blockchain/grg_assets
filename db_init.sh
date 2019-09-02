@@ -134,12 +134,12 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 echo "create t_sp_info";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_info (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
-    sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
+    spId VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
 	name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户名称',
-	simple_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户简称',
-	sp_type INT(1) NOT NULL DEFAULT 1 COMMENT '企业类型。【1】股份有限公司【2】有限责任公司',
+	simpleName VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户简称',
+	spType INT(1) NOT NULL DEFAULT 1 COMMENT '企业类型。【1】股份有限公司【2】有限责任公司',
 	
-	sp_info TEXT NOT NULL COMMENT '商户信息。json字符串格式',
+	info TEXT NOT NULL COMMENT '商户信息。json字符串格式',
 			address VARCHAR(256) NOT NULL DEFAULT '' COMMENT '商户地址',
 			mobile VARCHAR(32) NOT NULL DEFAULT '' COMMENT '商户联系号码',
 			registered_capital INT(10) NOT NULL DEFAULT 0 COMMENT '注册资金',
@@ -157,9 +157,8 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 			cr_cert_back_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '法人代表证件照（背面）地址',
 			business_license_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '营业执照照片地址',
 			bank_account_permit_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '银行开户许可证照片地址',
-			have_own_score INT(0) NOT NULL DEFAULT 0 COMMENT '是否有积分系统。【1】否【2】是',
 
-	aes_key VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '对称密钥',
+	# aes_key VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '对称密钥',
 	state INT(1) NOT NULL DEFAULT 1 COMMENT '状态。【1】正常，【2】被冻结。',
     create_time DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
 	update_time DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
