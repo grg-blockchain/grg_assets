@@ -243,10 +243,11 @@ router.get('/asset/list', opRecord)
 router.get('/transaction/list', opRecord)
 
 /**
- * @api {GET} /asset/:assetId/getDetail 获取商户资产明细
+ * @api {GET} /asset/getDetail 获取商户资产明细
  * @apiDescription 获取商户资产明细
  * @apiName getDetail
  * @apiParam {String} spUid 发行商户user id
+ * @apiParam {String} assetId 资产ID
  * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
  * @apiSuccess {String} message  提示信息
  * @apiSuccess {Object} data   返回结果
@@ -274,7 +275,7 @@ router.get('/transaction/list', opRecord)
  *    }
  * @apiGroup Asset
  */
-router.get('/asset/:assetId/getDetail', opRecord)
+router.get('/asset/getDetail', opRecord)
 
 
 /**
