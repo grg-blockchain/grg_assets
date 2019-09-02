@@ -1,4 +1,5 @@
 const User = require('./controller/user');
+const Guaranty = require('./controller/guaranty');
 const router = require('koa-router')({prefix: '/api/v1', sensitive: true});
 const {opRecord, ResponseFormatter} = require('./middleware')
 
@@ -109,7 +110,7 @@ router.post('/user/login', User.login);
  *    }
  * @apiGroup Guaranty
  */
-router.get('/guaranty/getDetail', opRecord)
+router.get('/guaranty/getDetail', Guaranty.getDetail)
 
 /**
  * @api {POST} /guaranty/submit 担保金提交申请
@@ -133,7 +134,7 @@ router.get('/guaranty/getDetail', opRecord)
  *    }
  * @apiGroup Guaranty
  */
-router.post('/guaranty/submit', opRecord)
+router.post('/guaranty/submit', Guaranty.submit)
 
 /**
  * @api {POST} /asset/approve 商户发行数字资产

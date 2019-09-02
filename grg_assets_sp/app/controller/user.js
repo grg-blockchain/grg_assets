@@ -1,7 +1,6 @@
 
 
 const { SpInfo } = require('../model')
-// const { redis } = require('../../config/initializer')
 const { log, AppError } = require('../lib')
 const Joi = require('joi')
 const UserService = require('../service/user');
@@ -18,8 +17,6 @@ class User {
     }
 
     static async register (ctx) {
-        // log.info('register ==>', ctx.param)
-        // const {mobile, loginPassword, name} = ctx.param
         const opts = ctx.param
         const schema = {
             mobile: Joi.string().required(),

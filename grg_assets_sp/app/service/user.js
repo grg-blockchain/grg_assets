@@ -1,4 +1,4 @@
-const BaseService = require('./base');
+const BaseService = require('./base')
 const { SpInfo } = require('../model')
 const { log } = require('../lib')
 class UserService extends BaseService {
