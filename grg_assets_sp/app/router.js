@@ -1,5 +1,6 @@
 const User = require('./controller/user');
 const Guaranty = require('./controller/guaranty');
+const Asset = require('./controller/asset');
 const router = require('koa-router')({prefix: '/api/v1', sensitive: true});
 const {opRecord, ResponseFormatter} = require('./middleware')
 
@@ -154,7 +155,7 @@ router.post('/guaranty/submit', Guaranty.submit)
  *    }
  * @apiGroup Asset
  */
-router.post('/asset/approve', opRecord)
+router.post('/asset/approve', opRecord, Asset.approve)
 
 
 /**
@@ -172,21 +173,21 @@ router.post('/asset/approve', opRecord)
  *    }
  * @apiGroup Asset
  */
-router.post('/asset/setSupply', opRecord)
+router.post('/asset/setSupply', opRecord, Asset.setSupply)
 
 /**
  * @api {GET} /asset/list 获取商户数字资产列表
  * @apiDescription 获取商户数字资产列表
  * @apiName list
  * @apiParam {String} spUid 发行商户user id
- * @apiParam {String} name 数字资产名字
- * @apiParam {String} state 数字资产状态,不填默认全部
+ * @apiParam {String} name 数字资产名字,选填,不填默认全部
+ * @apiParam {String} state 数字资产状态,选填,不填默认全部
  * @apiSuccessExample {json} Success-Response:
  *    HTTP/1.1 200 OK
  *    {
  *      "code": 0
  *      "data": {
- *          "list": [
+ *          "assets": [
  *              {
  *                  "name": "通用电影票",             //资产名字
  *                  "supply": 10000,                //资产发行量
@@ -206,7 +207,7 @@ router.post('/asset/setSupply', opRecord)
  *    }
  * @apiGroup Asset
  */
-router.get('/asset/list', opRecord)
+router.get('/asset/list', Asset.list)
 
 
 /**
@@ -275,7 +276,7 @@ router.get('/transaction/list', opRecord)
  *    }
  * @apiGroup Asset
  */
-router.get('/asset/getDetail', opRecord)
+router.get('/asset/getDetail', Asset.getDetail)
 
 
 /**
