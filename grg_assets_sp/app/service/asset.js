@@ -52,11 +52,16 @@ class AssetService extends BaseService {
         let assets = await Asset.findAll({where: query})
         let ret = []
         assets.forEach(e => {
+            let circulatingSupply = 0
+            let remainingSupply = e.supply - circulatingSupply
             ret.push({
                 assetId: e.id,
                 name: e.name,
                 supply: e.supply,
                 date: e.createdAt,
+                price: e.price,
+                circulatingSupply: circulatingSupply,
+                remainingSupply: remainingSupply,
                 state: e.state
             })
         });
@@ -84,7 +89,7 @@ class AssetService extends BaseService {
                 price: assetInfo.price,
                 state: assetInfo.state,
                 circulatingSupply: 0,
-                circulatingSupply: 0,
+                remainingSupply: 0,
                 transactionHistory: []
             }
             ret.remainingSupply = ret.supply - ret.circulatingSupply

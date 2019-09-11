@@ -23,6 +23,7 @@ router.get('/user/logout', opRecord, User.logout);
  * @apiParam {Number} spType 企业类型。【1】股份有限公司【2】有限责任公司
  * @apiParam {String} address 商户地址
  * @apiParam {Number} registeredCapital 注册资金
+ * @apiParam {Number} paidinCapital 实缴资金
  * @apiParam {String} establishmentDate 成立日期
  * @apiParam {String} businessTermBegin 营业期限起始日期，若无期限，则为0000-00-00 00:00:00
  * @apiParam {String} businessTermEnd 营业期限结束日期，若无期限，则为0000-00-00 00:00:00
@@ -53,7 +54,7 @@ router.post('/user/register', opRecord, User.register);
 
 /**
  * 商户登陆
- * @api {POST} /users/login 商户登陆
+ * @api {POST} /user/login 商户登陆
  * @apiDescription 商户登陆
  * @apiName login
  * @apiParam {String} mobile 手机号
@@ -73,6 +74,24 @@ router.post('/user/register', opRecord, User.register);
  * @apiGroup User
  */
 router.post('/user/login', User.login);
+
+
+/**
+ * @api {POST} /user/checkMobileExist 手机号码是否被注册
+ * @apiDescription 商户登陆
+ * @apiName checkMobileExist
+ * @apiParam {String} mobile 手机号
+ * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
+ * @apiSuccess {String} data   返回结果
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "code": 0,
+ *      "data": 0
+ *    }
+ * @apiGroup User
+ */
+router.post('/user/checkMobileExist', User.checkMobileExist);
 
 
 /**
@@ -98,7 +117,7 @@ router.post('/user/login', User.login);
  *                  "bankCard": "xxxxxxxxxxxxxxxxxx",  //银行卡号码
  *                  "quota": 10000,                    //转账金额，元作为单位
  *                  "date": "2019-09-01 08:00:00",     //转账时间
- *                  "state": "pass"                    //审核状态
+ *                  "state": "pass"                    //审核状态，auditing 审核中，pass 审核通过，fail 审核失败
  *              },
  *              {
  *                  "bank": "平安银行", 
@@ -181,7 +200,7 @@ router.post('/asset/setSupply', opRecord, Asset.setSupply)
  * @apiName list
  * @apiParam {String} spUid 发行商户user id
  * @apiParam {String} name 数字资产名字,选填,不填默认全部
- * @apiParam {String} state 数字资产状态,选填,不填默认全部
+ * @apiParam {String} state 数字资产状态,选填,不填默认全部（working: 发行中; suspend: 暂停，不可以发送给用户; stop: 停止这个资产的发送，不可以再发送） 
  * @apiSuccessExample {json} Success-Response:
  *    HTTP/1.1 200 OK
  *    {

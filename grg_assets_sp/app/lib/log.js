@@ -12,6 +12,5 @@ log4js.configure({
 });
 
 const log = log4js.getLogger('custom');
-log.info('=================>')
 module.exports = log
 

@@ -11,7 +11,7 @@ class Asset {
             expiration: Joi.number().required().error(new AppError('expiration错误')),
             supply: Joi.number().required().error(new AppError('supply错误')),
             price: Joi.number().required().error(new AppError('price错误')),
-            desc: Joi.string()
+            desc: Joi.string().allow('')
         }
         const assetService = new AssetService(opts, schema, ctx)
         ctx.body = await assetService.approve()
@@ -27,18 +27,18 @@ class Asset {
         ctx.body = await assetService.setSupply()
     }
     static async list(ctx) {
-        const opts = ctx.param
+        const {spUid, name, state} = ctx.param
+        const opts = {spUid, name, state}
         const schema = {
             spUid: Joi.string().required().error(new AppError('spUid错误')),
-            name: Joi.string(),
-            state: Joi.string()
+            name: Joi.string().allow(''),
+            state: Joi.string().allow('')
         }
         const assetService = new AssetService(opts, schema, ctx)
         ctx.body = await assetService.list()
     }
     static async getDetail(ctx) {
         const opts = ctx.param
-        console.log('===========opts=====>',opts)
         const schema = {
             spUid: Joi.string().required().error(new AppError('spUid错误')),
             assetId: Joi.string().required().error(new AppError('assetId错误'))

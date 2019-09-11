@@ -12,15 +12,18 @@ class Guaranty {
             bankCard: Joi.string().required().error(new AppError('bankCard错误')),
             serialNumber: Joi.string().required().error(new AppError('serialNumber错误')),
             quota: Joi.number().required().error(new AppError('quota错误')),
-            desc: Joi.string()
+            desc: Joi.string().allow('')
         }
         const guarantyService = new GuarantyService(opts, schema, ctx)
         ctx.body = await guarantyService.submit()
     }
     static async getDetail(ctx) {
-        const opts = ctx.param
+        const {spUid, bank, bankCard} = ctx.param
+        const opts = {spUid, bank, bankCard}
         const schema = {
-            spUid: Joi.string().required().error(new AppError('spUid错误'))
+            spUid: Joi.string().required().error(new AppError('spUid错误')),
+            bank: Joi.string().allow(''),
+            bankCard: Joi.string().allow('')
         }
         const guarantyService = new GuarantyService(opts, schema, ctx)
         ctx.body = await guarantyService.getDetail()

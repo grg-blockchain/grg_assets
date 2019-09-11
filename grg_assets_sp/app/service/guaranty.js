@@ -28,7 +28,20 @@ class GuarantyService extends BaseService {
         
     }
     async getDetail() {
-        const {spUid} = this.options
+        const {spUid, bank, bankCard} = this.options
+
+        let query = {
+            spUid: spUid
+        }
+
+        if(bank){
+            query['bank'] = bank
+        }
+
+        if(bankCard){
+            query['bankCard'] = bankCard
+        }
+
         const transInfos = await GuarantyTransaction.findAll({where: {spUid: spUid}})
 
         return {

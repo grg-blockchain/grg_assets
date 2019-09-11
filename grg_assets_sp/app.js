@@ -4,14 +4,28 @@ const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
+var path = require("path")
 const session=require('koa-session');
-const logger = require('koa-logger')
+// const logger = require('koa-logger')
 const http = require('http');
 const router = require('./app/router');
 const config = require('config');
 const port = config.get('port');
-const { queryAndBodyToParam } = require('./app/middleware');
+const { queryAndBodyToParam, log } = require('./app/middleware');
 require('./config/initializer');
+
+var koaBody = require('koa-body')({
+  multipart: true,
+  formidable: { 
+    uploadDir: path.join(__dirname, 'tmp'),
+    keepExtensions: true,    // 保持文件的后缀
+    maxFieldsSize: 2 * 1024 * 1024, // 文件上传大小
+    onFileBegin:(name,file) => { // 文件上传前的设置
+      console.log(`name: ${name}`);
+      console.log(file);
+    },
+  }
+});
 
 // error handler
 onerror(app)
@@ -27,17 +41,23 @@ app.use(session({
   signed: true, /** (boolean) signed or not (default true) */
 },app));
 
+app.use(koaBody);
 app.use(bodyparser({}))
 app.use(json())
-app.use(logger())
+
 app.use(queryAndBodyToParam)
 // logger
+app.use(log)
 app.use(async (ctx, next) => {
   const start = new Date()
   await next()
   const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+  // console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+
+
+
 
 // routes
 app.use(router.routes(), router.allowedMethods());

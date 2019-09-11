@@ -6,7 +6,7 @@ class BaseService {
     this.options = options;
     this.schema = schema;
     this.ctx = ctx;
-    // if (!ignore) this._validOptions();
+    if (!ignore) this._validOptions();
   }
 
   warnError (msg, code = 1) {
@@ -15,12 +15,9 @@ class BaseService {
 
   _validOptions () {
     const {error, value} = Joi.validate(this.options, this.schema);
-    console.log('error=====>', error)
-    console.log('value=====>', value)
     if (error) {
       this.warnError(error.message || error.details[0].message);
     }
-    console.log('this.options=====>', this.options)
     this.options = value;
   }
 }
