@@ -91,7 +91,7 @@ router.post('/user/login', User.login);
  *          "spUid": "xxxxxxxxxxxxxxxx"
  *      }
  *    }
- * @apiGroup User
+ * @apiGroup sp
  */
 router.get('/sp/list', Sp.list);
 
