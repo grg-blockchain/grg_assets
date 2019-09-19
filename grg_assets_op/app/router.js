@@ -46,28 +46,7 @@ router.post('/user/register', opRecord, User.register);
  *      "code": 0,
  *      "msg": "登陆成功",
  *      "data": {
- *          "spUid": "xxxxxxxxxxxxxxxx"
- *      }
- *    }
- * @apiGroup User
- */
-router.post('/user/login', User.login);
-
-/**
- * @api {POST} /sp/list 商户列表
- * @apiDescription 商户列表
- * @apiName login
- * @apiParam {String} opUid 运营账户ID
- * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
- * @apiSuccess {String} message  提示信息
- * @apiSuccess {Object} data   返回结果
- * @apiSuccessExample {json} Success-Response:
- *    HTTP/1.1 200 OK
- *    {
- *      "code": 0,
- *      "msg": "登陆成功",
- *      "data": {
- *          "spUid": "xxxxxxxxxxxxxxxx"
+ *          "opUid": "xxxxxxxxxxxxxxxx"
  *      }
  *    }
  * @apiGroup User
