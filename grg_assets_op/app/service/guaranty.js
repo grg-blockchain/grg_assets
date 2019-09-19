@@ -35,6 +35,21 @@ class GuarantyService extends BaseService {
         }
     }
 
+    async audit() {
+        const { spUid, guarantyTransactionId, state } = this.options
+        let query = {
+            id: guarantyTransactionId,
+            spUid: spUid
+        }
+        let updateData = {
+            state: state
+        }
+        let gTransaction = await GuarantyTransaction.update(updateData, {where: query})
+        log.debug(`gTransaction: ${JSON.stringify(gTransaction)}`)
+        
+        return '审核成功'
+    }
+
 }
 
 module.exports = GuarantyService;

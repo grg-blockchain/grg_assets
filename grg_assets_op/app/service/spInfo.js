@@ -20,6 +20,18 @@ class SpInfoService extends BaseService {
         }
         return {spInfos: spInfos}
     }
+
+    async audit () {
+        const { spUid, state} = this.options
+        let query = {id: spUid}
+        let updateData = {
+            state: state
+        }
+        let spInfo = await SpInfo.update(updateData, {where: query})
+        log.debug(`spInfos: ${JSON.stringify(spInfo)}`)
+        
+        return '审核成功'
+    }
 }
 
 module.exports = SpInfoService;

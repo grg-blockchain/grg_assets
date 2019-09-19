@@ -74,6 +74,28 @@ router.post('/user/login', User.login);
  */
 router.get('/sp/list', Sp.list);
 
+/**
+ * @api {POST} /sp/audit 商户账户审核
+ * @apiDescription 商户账户审核
+ * @apiName audit
+ * @apiParam {String} opUid 运营账户ID
+ * @apiParam {String} spUid 商户ID
+ * @apiParam {String} state 商户账户状态
+ * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
+ * @apiSuccess {String} message  提示信息
+ * @apiSuccess {Object} data   返回结果
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "code": 0,
+ *      "data": "审核成功"
+ *    }
+ * @apiGroup sp
+ */
+router.post('/sp/audit', Sp.audit);
+
+
+
 
 
 /**
@@ -116,6 +138,27 @@ router.get('/sp/list', Sp.list);
  */
 router.get('/guaranty/list', Guaranty.list)
 
+
+/**
+ * @api {POST} /guaranty/audit 商户账户审核
+ * @apiDescription 商户账户审核
+ * @apiName audit
+ * @apiParam {String} opUid 运营账户ID
+ * @apiParam {String} spUid 商户ID
+ * @apiParam {String} guarantyTransactionId 担保金记录id
+ * @apiParam {String} state 修改状态
+ * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
+ * @apiSuccess {String} message  提示信息
+ * @apiSuccess {Object} data   返回结果
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "code": 0,
+ *      "data": "审核成功"
+ *    }
+ * @apiGroup guaranty
+ */
+router.post('/guaranty/audit', Guaranty.audit);
 
 
 
