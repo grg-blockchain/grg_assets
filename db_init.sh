@@ -306,7 +306,7 @@ echo "create t_operate_account";
         INDEX idx_mobile (mobile)
         ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 ";
-mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "INSERT INTO t_operate_account (mobile, password, is_admin, create_time, update_time) value ('13661631812', '200820e3227815ed1756a6b531e7e0d2', 1, '2019-06-04 15:15:15', '2019-06-04 15:15:15');";
+mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "INSERT INTO t_operate_account (mobile, password, is_admin, create_time, update_time) value ('13666666666', '200820e3227815ed1756a6b531e7e0d2', 1, '2019-06-04 15:15:15', '2019-06-04 15:15:15');";
 
 
 ###################################
