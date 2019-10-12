@@ -7,7 +7,7 @@ const {opRecord, ResponseFormatter} = require('./middleware')
 
 router.use('/', ResponseFormatter('^/api'));
 
-router.get('/user/logout', opRecord, User.logout);
+// router.get('/user/logout', opRecord, User.logout);
 
 /**
  * 运营注册
@@ -67,7 +67,45 @@ router.post('/user/login', User.login);
  *      "code": 0,
  *      "msg": "登陆成功",
  *      "data": {
- *          "spUid": "xxxxxxxxxxxxxxxx"
+ *          "spInfos": [
+ *               {
+ *                   "id": 1,
+ *                   "name": "GRG banking",
+ *                   "mobile": "18719460360",
+ *                   "simpleName": "GRG",
+ *                   "spType": "1",
+ *                   "info": {
+ *                      "name": "GRG banking",
+ *                      "mobile": "18719460360",
+ *                      "spType": "1",
+ *                      "address": "科林路11号",
+ *                      "simpleName": "GRG",
+ *                      "establishmentDate": "2019-09-01 10:12:00",
+ *                      "registeredCapital": 1000000
+ *                   },
+ *                   "state": "pass",
+ *                   "createdAt": "2019-09-06T00:57:48.000Z",
+ *                   "updatedAt": "2019-09-19T06:55:42.000Z"
+ *               },
+ *               {
+ *                   "id": 7,
+ *                   "name": "GRG banking",
+ *                   "mobile": "18719460361",
+ *                   "simpleName": "GRG",
+ *                   "spType": "1",
+ *                   "info": {
+ *                      "name": "GRG banking",
+ *                      "mobile": "18719460361",
+ *                      "spType": "1",
+ *                      "address": "科林路11号",
+ *                      "simpleName": "GRG",
+ *                      "establishmentDate": "2019-09-01 10:12:00",
+ *                      "registeredCapital": 1000000
+ *                   },
+ *                   "state": null,
+ *                   "createdAt": "2019-09-06T01:31:18.000Z",
+ *                   "updatedAt": "2019-09-06T01:31:18.000Z"
+ *               }
  *      }
  *    }
  * @apiGroup sp
@@ -80,7 +118,7 @@ router.get('/sp/list', Sp.list);
  * @apiName audit
  * @apiParam {String} opUid 运营账户ID
  * @apiParam {String} spUid 商户ID
- * @apiParam {String} state 商户账户状态
+ * @apiParam {String} state 商户账户状态 pass:审核通过，fail:审核不通过
  * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
  * @apiSuccess {String} message  提示信息
  * @apiSuccess {Object} data   返回结果
@@ -93,8 +131,6 @@ router.get('/sp/list', Sp.list);
  * @apiGroup sp
  */
 router.post('/sp/audit', Sp.audit);
-
-
 
 
 
@@ -118,14 +154,17 @@ router.post('/sp/audit', Sp.audit);
  *          "sumbitHistory": [
  *              {
  *                  "spUid": "3",                      //商户id
+ *                  "id": "1",                         //担保金记录id
  *                  "bank": "平安银行", 
  *                  "bankCard": "xxxxxxxxxxxxxxxxxx",  //银行卡号码
  *                  "quota": 10000,                    //转账金额，元作为单位
  *                  "date": "2019-09-01 08:00:00",     //转账时间
+ *                  "desc": "描述记录",                  //记录描述
  *                  "state": "pass"                    //审核状态，auditing 审核中，pass 审核通过，fail 审核失败
  *              },
  *              {
- *                  "spUid": "3",                 
+ *                  "spUid": "3",      
+ *                  "id": "2",           
  *                  "bank": "平安银行", 
  *                  "bankCard": "xxxxxxxxxxxxxxxxxx", 
  *                  "quota": 20000, 
@@ -146,7 +185,7 @@ router.get('/guaranty/list', Guaranty.list)
  * @apiParam {String} opUid 运营账户ID
  * @apiParam {String} spUid 商户ID
  * @apiParam {String} guarantyTransactionId 担保金记录id
- * @apiParam {String} state 修改状态
+ * @apiParam {String} state 修改状态，pass:审核通过，fail:审核不通过
  * @apiSuccess {Number} code 0 代表成功，非 0 则表示失败
  * @apiSuccess {String} message  提示信息
  * @apiSuccess {Object} data   返回结果
@@ -156,7 +195,7 @@ router.get('/guaranty/list', Guaranty.list)
  *      "code": 0,
  *      "data": "审核成功"
  *    }
- * @apiGroup guaranty
+ * @apiGroup Guaranty
  */
 router.post('/guaranty/audit', Guaranty.audit);
 
