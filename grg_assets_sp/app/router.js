@@ -230,6 +230,42 @@ router.get('/asset/list', Asset.list)
 
 
 /**
+ * @api {GET} /store/assetList 获取商户在商城上的商品列表
+ * @apiDescription 获取商户在商城上的商品列表
+ * @apiName assetList
+ * @apiParam {String} spUid 发行商户user id，选填,不填默认全部
+ * @apiParam {String} name 数字资产名字,选填,不填默认全部
+ * @apiParam {String} assetId 数字资产状态,选填,不填默认全部
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *      "code": 0
+ *      "data": {
+ *          "assets": [
+ *              {
+ *                  "name": "通用电影票",             //资产名字
+ *                  "supply": 10000,                //资产发行量
+ *                  "date": "2019-09-01 08:00:00",  //资产发行时间
+ *                  "state": "working",              //资产状态
+ *                  "assetId": "xxxxxxx001"         //资产ID
+ *                  "text":{}                       //其他信息
+ *              },
+ *              {
+ *                  "name": "麦当劳通用券",
+ *                  "supply": 10000,
+ *                  "date": "2019-09-01 08:00:00",
+ *                  "state": "working",
+ *                  "assetId": "xxxxxxx002",
+ *                  "text":{}
+ *              }
+ *          ]
+ *      }
+ *    }
+ * @apiGroup Store
+ */
+router.get('/store/assetList', Asset.list)
+
+/**
  * @api {GET} /transaction/list 获取交易列表
  * @apiDescription 获取交易列表
  * @apiName list
