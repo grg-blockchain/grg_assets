@@ -13,16 +13,20 @@ let SpInfo = sequelize.define('t_sp_info', {
       type: Sequelize.STRING
     },
     loginPassword: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      field: 'login_password'
     },
     payPassword: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      field: 'pay_password'
     },
     simpleName: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      field: 'simple_name'
     },
     spType: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      field: 'sp_type'
     },
     info: {
       type: Sequelize.JSON

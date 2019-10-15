@@ -8,15 +8,18 @@ const Sequelize = require('sequelize');
 let GuarantyTransaction = sequelize.define('t_guaranty_transaction', {
     spUid: {
       type: Sequelize.STRING,
+      field: 'sp_id'
     },
     bank: {
       type: Sequelize.STRING
     },
     bankCard: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      field: 'bankcard'
     },
     serialNumber: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      field: 'serial_number'
     },
     quota: {
       type: Sequelize.FLOAT

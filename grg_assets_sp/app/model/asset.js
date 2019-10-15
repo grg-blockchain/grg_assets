@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 let Asset = sequelize.define('t_sp_asset', {
     spUid: {
         type: Sequelize.STRING,
+        field: 'sp_id'
     },
     name: {
         type: Sequelize.STRING,

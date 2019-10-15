@@ -95,13 +95,13 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 echo "create t_sp_info";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_info (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
-    spId VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
+    sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
 	name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户名称',
-	simpleName VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户简称',
-	spType INT(1) NOT NULL DEFAULT 1 COMMENT '企业类型。【1】股份有限公司【2】有限责任公司',
+	simple_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户简称',
+	sp_type INT(1) NOT NULL DEFAULT 1 COMMENT '企业类型。【1】股份有限公司【2】有限责任公司',
 	mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '手机号码',
-	loginPassword VARCHAR(64) NOT NULL DEFAULT '' COMMENT '登陆密码',
-	payPassword VARCHAR(64) NOT NULL DEFAULT '' COMMENT '支付密码',
+	login_password VARCHAR(64) NOT NULL DEFAULT '' COMMENT '登陆密码',
+	pay_password VARCHAR(64) NOT NULL DEFAULT '' COMMENT '支付密码',
 
 	info TEXT NOT NULL COMMENT '商户信息。json字符串格式',
 			address VARCHAR(256) NOT NULL DEFAULT '' COMMENT '商户地址',
@@ -136,13 +136,12 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 echo "create t_sp_assets";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_assets (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
-	spUid VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
+	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
 	name VARCHAR(32) NOT NULL DEFAULT '' COMMENT '数字资产名字',
 	expiration INT(4) NOT NULL DEFAULT 24 COMMENT '有效期，用月来计',
 	desc VARCHAR(128) NOT NULL DEFAULT '' COMMENT '积分的描述',
 	price INT NOT NULL DEFAULT 0 COMMENT '1单位资产价值',
 	supply INT NOT NULL DEFAULT 0 COMMENT '总发行量'',
-	reconciliation_cycle INT(1) NOT NULL DEFAULT 2 COMMENT '对账周期：【1】按周对账【2】按月对账【3】按季度对账【4】按年对账',
 	state VARCHAR(64) NOT NULL DEFAULT '' COMMENT '状态。【0】停用（不能再发放这种资产），【1】正常,
 	type VARCHAR(64) NOT NULL DEFAULT '' COMMENT '状态。【0】停用（不能再发放这种资产），【1】正常,
     create_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
@@ -157,10 +156,10 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 echo "create t_guaranty_transaction";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_guaranty_transaction (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
-	spUid VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
+	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
 	bank VARCHAR(64) NOT NULL DEFAULT '' COMMENT '银行名字',
-	bankCard VARCHAR(64) NOT NULL DEFAULT '' COMMENT '银行卡号',
-	serialNumber VARCHAR(64) NOT NULL DEFAULT '' COMMENT '流水号',
+	bankcard VARCHAR(64) NOT NULL DEFAULT '' COMMENT '银行卡号',
+	serial_number VARCHAR(64) NOT NULL DEFAULT '' COMMENT '流水号',
 	quota INT NOT NULL DEFAULT 0 COMMENT '转账金额',
 	desc VARCHAR(128) NOT NULL DEFAULT '' COMMENT '描述',
 	state VARCHAR(64) NOT NULL DEFAULT '' COMMENT '状态',
@@ -178,14 +177,13 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
 	name VARCHAR(32) NOT NULL DEFAULT '' COMMENT '用户名',
 	mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '手机号码',
-	loginPassword VARCHAR(64) NOT NULL DEFAULT '' COMMENT '登陆密码',
+	login_password VARCHAR(64) NOT NULL DEFAULT '' COMMENT '登陆密码',
 	authority VARCHAR(64) NOT NULL DEFAULT '' COMMENT '账户权限',
 	state VARCHAR(64) NOT NULL DEFAULT '' COMMENT '账户状态',
     create_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
 	update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
 
-	PRIMARY KEY (id),
-	UNIQUE INDEX uidx_sp_id(sp_id)
+	PRIMARY KEY (id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 ";
 

@@ -8,6 +8,7 @@ let OpRecord = sequelize.define('opRecord', {
     },
     originalUrl: {
       type: Sequelize.STRING,
+      field: 'original_url'
     },
     method: {
         type: Sequelize.STRING
