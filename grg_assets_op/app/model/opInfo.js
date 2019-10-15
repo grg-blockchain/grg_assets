@@ -13,7 +13,8 @@ let OpInfo = sequelize.define('t_op_info', {
       type: Sequelize.STRING
     },
     loginPassword: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      field: 'login_passworld'
     },
     authority: {
       type: Sequelize.STRING

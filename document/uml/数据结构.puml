@@ -1,0 +1,35 @@
+
+@startuml
+
+SpInfo : name
+SpInfo : mobile
+SpInfo : loginPassword
+SpInfo : payPassword
+SpInfo : simpleName
+SpInfo : spType
+SpInfo : info
+SpInfo : state
+
+Asset : spUid
+Asset : name
+Asset : expiration
+Asset : price
+Asset : supply
+Asset : state
+Asset : type
+
+
+GuarantyTransaction : spUid
+GuarantyTransaction : bank
+GuarantyTransaction : bankCard
+GuarantyTransaction : serialNumber
+GuarantyTransaction : quota
+GuarantyTransaction : state
+GuarantyTransaction : desc
+
+
+SpInfo --> Asset
+SpInfo --> GuarantyTransaction
+@enduml
+
+

@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 let Asset = sequelize.define('t_sp_asset', {
     spUid: {
         type: Sequelize.STRING,
+        field: 'sp_id'
     },
     name: {
         type: Sequelize.STRING,
@@ -22,6 +23,9 @@ let Asset = sequelize.define('t_sp_asset', {
     },
     state: {
         type: Sequelize.STRING              //working: 发行中; suspend: 暂停，不可以发送给用户; stop: 停止这个资产的发送，不可以再发送 
+    },
+    type: {
+        type: Sequelize.STRING
     }
   }, {
     // freezeTabelName 为 true 时不会在库中映射表时增加复数表名

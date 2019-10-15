@@ -87,54 +87,18 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 
 
 
-echo "create t_sp_info_tmp";
-mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_info_tmp (
-	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
-	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
-	name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户名称',
-	simple_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户简称',
-	sp_type INT(1) NOT NULL DEFAULT 1 COMMENT '企业类型。【1】股份有限公司【2】有限责任公司',
-	
-	sp_info TEXT NOT NULL COMMENT '商户信息。json字符串格式',
-			address VARCHAR(256) NOT NULL DEFAULT '' COMMENT '商户地址',
-			mobile VARCHAR(32) NOT NULL DEFAULT '' COMMENT '商户联系号码',
-			registered_capital INT(10) NOT NULL DEFAULT 0 COMMENT '注册资金',
-			establishment_date DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '成立日期',
-			business_term_begin DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '营业期限起始日期，若无期限，则为0000-00-00 00:00:00',
-			business_term_end DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '营业期限结束日期，若无期限，则为0000-00-00 00:00:00',
-			business_term_endless INT(1) NOT NULL DEFAULT 0 COMMENT '【0】非长期，此时business_term_begin,business_term_end有效。【1】长期，此时business_term_begin,business_term_end无效',
-			business_scope VARCHAR(256) NOT NULL DEFAULT '' COMMENT '经营范围',
-			cr_name VARCHAR(32) NOT NULL DEFAULT '' COMMENT '企业法人代表姓名',
-			cr_cert_type INT(1) NOT NULL DEFAULT 0 COMMENT '企业法人证件类型, 【0】身份证',
-			cr_cert_num VARCHAR(32) NOT NULL DEFAULT '' COMMENT '企业法人证件号',
-			cr_mobile VARCHAR(32) NOT NULL DEFAULT '' COMMENT '企业法人联系手机号',
-			cr_cert_expire_date DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '证件到期时间',
-			cr_cert_front_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '法人代表证件照（正面）地址',
-			cr_cert_back_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '法人代表证件照（背面）地址',
-			business_license_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '营业执照照片地址',
-			bank_account_permit_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '银行开户许可证照片地址',
-			have_own_score INT(0) NOT NULL DEFAULT 0 COMMENT '是否有资产系统。【1】否【2】是',
-
-	aes_key VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '对称密钥',
-	state INT(1) NOT NULL DEFAULT 0 COMMENT '审核状态。【0】未审核，【1】审核通过，【2】审核拒绝',
-	state_msg VARCHAR(512) NOT NULL DEFAULT '' COMMENT '审核说明',
-    create_time DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
-	update_time DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
-
-	PRIMARY KEY (id),
-	INDEX idx_sp_id(sp_id)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-";
-
 
 echo "create t_sp_info";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_info (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
-    spId VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
+    sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
 	name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户名称',
-	simpleName VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户简称',
-	spType INT(1) NOT NULL DEFAULT 1 COMMENT '企业类型。【1】股份有限公司【2】有限责任公司',
-	
+	simple_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '商户简称',
+	sp_type INT(1) NOT NULL DEFAULT 1 COMMENT '企业类型。【1】股份有限公司【2】有限责任公司',
+	mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '手机号码',
+	login_password VARCHAR(64) NOT NULL DEFAULT '' COMMENT '登陆密码',
+	pay_password VARCHAR(64) NOT NULL DEFAULT '' COMMENT '支付密码',
+
 	info TEXT NOT NULL COMMENT '商户信息。json字符串格式',
 			address VARCHAR(256) NOT NULL DEFAULT '' COMMENT '商户地址',
 			mobile VARCHAR(32) NOT NULL DEFAULT '' COMMENT '商户联系号码',
@@ -165,20 +129,17 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 ";
 
 
-echo "create t_sp_assets_config";
-mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_assets_config (
+echo "create t_sp_assets";
+mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_assets (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
 	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
-	name VARCHAR(32) NOT NULL DEFAULT '运通利是' COMMENT '资产名字',
+	name VARCHAR(32) NOT NULL DEFAULT '' COMMENT '数字资产名字',
 	expiration INT(4) NOT NULL DEFAULT 24 COMMENT '有效期，用月来计',
-	desc VARCHAR(128) NOT NULL DEFAULT '' COMMENT '资产的描述',
-	icon_image_url VARCHAR(256) NOT NULL DEFAULT '' COMMENT '资产的图标',
-	price INT NOT NULL DEFAULT 100 COMMENT '1单位资产价值',
-	fee INT NOT NULL DEFAULT 0 COMMENT '兑入手续费，用百分比表示。',
-	reconciliation_cycle INT(1) NOT NULL DEFAULT 2 COMMENT '对账周期：【1】按周对账【2】按月对账【3】按季度对账【4】按年对账',
-	state INT(1) NOT NULL DEFAULT 0 COMMENT '状态。【0】停用（不能再发放这种资产），【1】正常,
-
-	release_total INT NOT NULL DEFAULT 0 COMMENT '总发行额度，即累计发行额度',
+	desc VARCHAR(128) NOT NULL DEFAULT '' COMMENT '积分的描述',
+	price INT NOT NULL DEFAULT 0 COMMENT '1单位资产价值',
+	supply INT NOT NULL DEFAULT 0 COMMENT '总发行量'',
+	state VARCHAR(64) NOT NULL DEFAULT '' COMMENT '状态。【0】停用（不能再发放这种资产），【1】正常,
+	type VARCHAR(64) NOT NULL DEFAULT '' COMMENT '状态。【0】停用（不能再发放这种资产），【1】正常,
     create_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
 	update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
 
@@ -186,6 +147,42 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 	UNIQUE INDEX uidx_sp_id(sp_id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 ";
+
+
+echo "create t_guaranty_transaction";
+mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_guaranty_transaction (
+	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
+	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
+	bank VARCHAR(64) NOT NULL DEFAULT '' COMMENT '银行名字',
+	bankcard VARCHAR(64) NOT NULL DEFAULT '' COMMENT '银行卡号',
+	serial_number VARCHAR(64) NOT NULL DEFAULT '' COMMENT '流水号',
+	quota INT NOT NULL DEFAULT 0 COMMENT '转账金额',
+	desc VARCHAR(128) NOT NULL DEFAULT '' COMMENT '描述',
+	state VARCHAR(64) NOT NULL DEFAULT '' COMMENT '状态',
+
+    create_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
+	update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
+
+	PRIMARY KEY (id),
+	UNIQUE INDEX uidx_sp_id(sp_id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+";
+
+echo "create t_op_info";
+mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_op_info (
+	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
+	name VARCHAR(32) NOT NULL DEFAULT '' COMMENT '用户名',
+	mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '手机号码',
+	login_password VARCHAR(64) NOT NULL DEFAULT '' COMMENT '登陆密码',
+	authority VARCHAR(64) NOT NULL DEFAULT '' COMMENT '账户权限',
+	state VARCHAR(64) NOT NULL DEFAULT '' COMMENT '账户状态',
+    create_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
+	update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
+
+	PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+";
+
 
 
 echo "create t_node_user_balance";
