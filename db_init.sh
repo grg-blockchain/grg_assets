@@ -3,19 +3,15 @@
 mysql_user="grg_assets"
 mysql_passwd="grg_assets_wG1sOp23sL"
 mysql_db="grg_assets"
-# CREATE USER grg_assets IDENTIFIED BY $mysql_passwd;
+# CREATE USER $mysql_user IDENTIFIED BY $mysql_passwd;
+# CREATE DATABASE $mysql_db;
 # GRANT ALL PRIVILEGES ON $mysql_db.* TO "$mysql_user"@"%" ;
 # FLUSH PRIVILEGES;
-# CREATE DATABASE $mysql_db;
 
-line=`cat grg_score_node/config.js | grep -n "db: {" | awk -F ':' '{print $1}'`;
+line=`cat grg_assets_node/config.js | grep -n "db: {" | awk -F ':' '{print $1}'`;
 let line=line+1;
-line=`sed -n "$line"p grg_score_node/config.js`;
+line=`sed -n "$line"p grg_assets_node/config.js`;
 host=`echo $line | awk -F"'" '{print $2}'`;
-
-#CREATE USER '$mysql_db'@'%' IDENTIFIED BY 'grg_score_wG1sOp23sL';FLUSH PRIVILEGES;
-#GRANT ALL ON $mysql_db.* TO '$mysql_db'@'%';FLUSH PRIVILEGES;
-
 
 mysql -h$host -u$mysql_user -p$mysql_passwd -s -e "drop database $mysql_db;";
 mysql -h$host -u$mysql_user -p$mysql_passwd -s -e "CREATE DATABASE IF NOT EXISTS $mysql_db;";
@@ -41,7 +37,7 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id ',
 	rule_key VARCHAR(64) NOT NULL COMMENT '配置项名字',
 	rule_value_int INT(10) NOT NULL DEFAULT 0 COMMENT '配置项整数值',
-	rule_desc VARCHAR(256) NOT NULL COMMENT '积分运营规则说明',
+	rule_desc VARCHAR(256) NOT NULL COMMENT '资产运营规则说明',
 
 	create_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
 	update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
@@ -117,7 +113,7 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 			cr_cert_back_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '法人代表证件照（背面）地址',
 			business_license_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '营业执照照片地址',
 			bank_account_permit_image_url VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '银行开户许可证照片地址',
-			have_own_score INT(0) NOT NULL DEFAULT 0 COMMENT '是否有积分系统。【1】否【2】是',
+			have_own_score INT(0) NOT NULL DEFAULT 0 COMMENT '是否有资产系统。【1】否【2】是',
 
 	aes_key VARCHAR(256) NOT NULL  DEFAULT '' COMMENT '对称密钥',
 	state INT(1) NOT NULL DEFAULT 0 COMMENT '审核状态。【0】未审核，【1】审核通过，【2】审核拒绝',
@@ -173,10 +169,10 @@ echo "create t_sp_assets_config";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_sp_assets_config (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
 	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '社会信用证号码',
-	name VARCHAR(32) NOT NULL DEFAULT '运通利是' COMMENT '积分名字',
+	name VARCHAR(32) NOT NULL DEFAULT '运通利是' COMMENT '资产名字',
 	expiration INT(4) NOT NULL DEFAULT 24 COMMENT '有效期，用月来计',
-	desc VARCHAR(128) NOT NULL DEFAULT '' COMMENT '积分的描述',
-	icon_image_url VARCHAR(256) NOT NULL DEFAULT '' COMMENT '积分的图标',
+	desc VARCHAR(128) NOT NULL DEFAULT '' COMMENT '资产的描述',
+	icon_image_url VARCHAR(256) NOT NULL DEFAULT '' COMMENT '资产的图标',
 	price INT NOT NULL DEFAULT 100 COMMENT '1单位资产价值',
 	fee INT NOT NULL DEFAULT 0 COMMENT '兑入手续费，用百分比表示。',
 	reconciliation_cycle INT(1) NOT NULL DEFAULT 2 COMMENT '对账周期：【1】按周对账【2】按月对账【3】按季度对账【4】按年对账',
@@ -196,7 +192,7 @@ echo "create t_node_user_balance";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_node_user_balance (
     id INT NOT NULL AUTO_INCREMENT COMMENT '自增id',
     mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '用户手机号',
-	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '积分所属商户的id',
+	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产所属商户的id',
 	assets_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产种类',
 	balance INT NOT NULL DEFAULT 0 COMMENT '资产余额',
 	desc TEXT COMMENT '资产说明',
@@ -231,7 +227,7 @@ echo "create t_node_sp_receive";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_node_sp_balance (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增id',
     mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '用户手机号',
-	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '积分所属商户的id',
+	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产所属商户的id',
 	assets_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产种类',
 	balance INT NOT NULL DEFAULT 0 COMMENT '资产余额',
 
@@ -248,10 +244,10 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 echo "create t_node_score_trans";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_node_score_trans (
     id INT NOT NULL AUTO_INCREMENT COMMENT '自增id',
-    payer_user_mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '积分付款方用户手机号',
-    payer_sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '积分付款方商户id',
-    payee_sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '积分收款方商户id',
-    payee_user_mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '积分收款方用户手机号',
+    payer_user_mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产付款方用户手机号',
+    payer_sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产付款方商户id',
+    payee_sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产收款方商户id',
+    payee_user_mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产收款方用户手机号',
 	assets_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产种类',
 	assets_desc TEXT COMMENT '资产说明',
 	count INT NOT NULL DEFAULT 0 COMMENT '商品的数量',
