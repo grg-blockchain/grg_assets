@@ -25,9 +25,6 @@ let Asset = sequelize.define('t_sp_asset', {
     },
     type: {
         type: Sequelize.STRING
-    },
-    extendInfo: {
-        type: Sequelize.JSON
     }
   }, {
     // freezeTabelName 为 true 时不会在库中映射表时增加复数表名
