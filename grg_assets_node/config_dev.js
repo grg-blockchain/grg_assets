@@ -8,10 +8,10 @@ module.exports = {
         path: __dirname + "/../storage/uploads/"
     },
     db: {
-        host: '10.252.51.1',
-        user: 'grg_score',
-        password: 'grg_score_123',
-        database: 'grg_score',
+        host: '127.0.0.1',
+        user: 'grg_assets',
+        password: 'grg_assets_wG1sOp23sL',
+        database: 'grg_assets',
     },
     redis: {
         host: "10.252.51.1",

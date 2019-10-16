@@ -4,22 +4,42 @@ var async = require('async');
 var result = require('../common/result')();
 var utils = require('../common/utils');
 
-let queryUserBalance = function (user_mobile, sp_id, callback) {
-    let result_data = {};
+let queryAssetsList = function (expire_time, mobile, assets_type, sp_id, assets_id, page, count, callback) {
+    let result_list = {};
 
-    var sqlStr = "select * from t_node_user_balance where expire_time >= ? and mobile = ? and sp_id = ? and score > 0;";
-    var params = [utils.getDatetime(), user_mobile, sp_id];
-    mysql.query(sqlStr, params, function (err, data) {
+    let sql_str = "select balance.* from t_node_user_balance as balance " +
+        "left join t_sp_assets as assets " +
+        "on balance.assets_id = assets.id and balance.assets_type = assets.type " +
+        "where balance.expire_time >= ? ";
+    let params = [utils.getDatetime()];
+
+    if (mobile != "") {
+        sql_str += "and balance.mobile = ? ";
+        params.push(mobile);
+    }
+    if (assets_type != "") {
+        sql_str += "and balance.assets_type = ? ";
+        params.push(assets_type);
+    }
+    if (sp_id != "") {
+        sql_str += "and balance.sp_id = ? ";
+        params.push(sp_id);
+    }
+    if (assets_id != "") {
+        sql_str += "and balance.assets_id = ? ";
+        params.push(assets_id);
+    }
+    sql_str += "and balance.balance > 0 limit ?,?;";
+    params.push(page*count);
+    params.push(count);
+
+    mysql.query(sql_str, params, function (err, data) {
         if (err) {
             logger.error(JSON.stringify(err))
             return callback(result.err_code.ERR_DB_ERROR);
         }
-        result_data.balance_list = data;
-        result_data.balance = 0;
-        for (let index in data) {
-            result_data.balance += data[index].score;
-        }
-        return callback(null, result_data);
+        result_list.assets_list = data;
+        return callback(null, result_list);
     });
 };
 
@@ -46,7 +66,7 @@ let queryUserSpScoreStatus = function (user_mobile, sp_id, datetime, callback) {
             });
         },
         function (data, callback) {
-            queryUserBalance(user_mobile, sp_id, function (err, data) {
+            queryList(user_mobile, sp_id, function (err, data) {
                 if (err) {
                     return callback(err);
                 }
@@ -84,7 +104,7 @@ let queryUserSpList = function (user_mobile, datetime, callback) {
 };
 
 module.exports = {
-    queryUserBalance,
+    queryAssetsList,
     queryUserSpScoreStatus,
     queryUserSpList
 }

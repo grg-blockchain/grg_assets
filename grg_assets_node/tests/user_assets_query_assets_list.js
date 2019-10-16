@@ -11,7 +11,7 @@ catch (e) {}
 var option = {
     host: test_config.host, //注意:不用协议部分(http://)
     port: test_config.port,
-    path: '/user_score/query_sp_score_list', //斜杠开头
+    path: '/user_assets/query_assets_list', //斜杠开头
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'Cookie': cookie} //设置content-type 头部
 };

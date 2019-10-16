@@ -8,7 +8,7 @@ let async = require('async');
 let sp = require('../daos/sp');
 let cr = require('../daos/cr');
 let utils = require('../common/utils');
-let score = require('../daos/score');
+let score = require('../daos/assets');
 let trans = require('../daos/trans');
 let redis = require('../common/redis');
 

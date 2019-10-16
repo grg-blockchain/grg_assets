@@ -119,9 +119,9 @@ post参数：
 
 
 3.3	用户端 - 查询自己持有的资产的列表
-url: /user_asset/query_sp_asset_list
+url: /user_asset/query_asset_list
 post参数：
--	type string 资产类型，选填（可选值：film）
+-	assets_type string 资产类型，选填（可选值：film）
 返回：
 	数组，每一个元素包含以下属性
 -	mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '用户手机号',
@@ -129,7 +129,7 @@ post参数：
 -	assets_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产id',
 -	balance INT NOT NULL DEFAULT 0 COMMENT '资产余额',
 -	price INT NOT NULL DEFAULT 0 COMMENT '资产价值',
--	desc TEXT COMMENT '资产说明',
+-	description TEXT COMMENT '资产说明',
 -	type 资产类型（可选值：film）
 -	icon_image_url VARCHAR(256) NOT NULL DEFAULT '' COMMENT '资产的图标',
 -	expire_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '过期时间',
@@ -139,10 +139,7 @@ example:
 {
 	"error_code": 0,
 	"error_msg": ". ",
-	"result": {
-		"page": 1,
-		"count": 2,
-		"list": [{
+	"result": [{
 			"id": 28,
 			"mobile": "15177317536",
 			"sp_id": "1000000000",
@@ -160,8 +157,8 @@ example:
 			"create_time": "2019-07-04 09:36:42",
 			"update_time": "2019-07-04 09:36:42",
 			"balance": 60,
-		}]
-	}
+		}
+	]
 }
 	
 3.4	用户端 - 设置支付密码
@@ -293,12 +290,13 @@ hot_assets数组中包含n个元素，每个元素里包含：
 -	img_url: string图片地址
 -	query_url: string点击图片后请求的地址
 -	desc string描述,
+
 3.11	用户端 – 电影 – 搜索影城
 url: /film/query_cinema
 post参数：
-	longitude string经度，选填
-	latitude string纬度，选填
-	film_name string电影名字，选填
+-	longitude string经度，选填
+-	latitude string纬度，选填
+-	film_name string电影名字，选填
 返回：
 	返回数组，每个元素包含如下字段：
 -	cinema_id string影城id
@@ -308,6 +306,7 @@ post参数：
 -	address string影城地址
 -	scene string场次（没有电影名字的话就为空）
 -	price float起始价格（没有电影名字的话就为空）
+
 3.12	用户端 – 电影 – 搜索电影票
 url: /film/query_ticket
 post参数：

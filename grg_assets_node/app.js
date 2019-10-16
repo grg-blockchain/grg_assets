@@ -76,7 +76,7 @@ app.use(function (req, res, next) {
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/user_account', require('./routes/user_account'));
-app.use('/user_score', require('./routes/user_score'));
+app.use('/user_assets', require('./routes/user_assets'));
 app.use('/user_trans', require('./routes/user_trans'));
 app.use('/wechat', require('./routes/wechat'));
 app.use('/sp_api', require('./routes/sp_api'));

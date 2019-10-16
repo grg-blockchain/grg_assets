@@ -6,7 +6,7 @@ var result = require('../common/result')();
 var logger = require('../common/log')("user_account");
 var async = require('async');
 var utils = require('../common/utils');
-var score = require('../daos/score');
+var score = require('../daos/assets');
 var trans = require('../daos/trans');
 
 /* GET users listing. */

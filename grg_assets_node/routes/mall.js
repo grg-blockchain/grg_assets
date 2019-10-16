@@ -1,52 +1,17 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-var result = require('../common/result')();
-var logger = require('../common/log')("wxaccount");
-var async = require('async');
-var config = require('../config');
-let httpclient = require('../common/httpclient');
+let result = require('../common/result')();
+let logger = require('../common/log')("wxaccount");
+let async = require('async');
+let config = require('../config');
 let mysql = require('../common/mysql');
-let wechat = require('../daos/wechat');
-var result = require('../common/result')();
-var utils = require('../common/utils');
+let utils = require('../common/utils');
 let redis = require('../common/redis');
 const Joi = require("joi");
 // require("joi-router")
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-    // res.send('respond with a resource');
-});
-
-
-router.post('/test_login',function(req,res,next){
-    var str = wechat.test_func2();
-    res.send(str);
-    // req.session.regenerate(function (error) {
-    //     if (error) {
-    //         return res.send(result.Result({}, result.err_code.ERR_SESSION_SERVER_ERROR));
-    //     }
-    //     req.session.zk = "12345";
-    //     return res.send(result.Result({session_id: req.session.id}));
-    // });
-});
-
-
-router.post('/test_query', function(req,res,next){
-    let schema = {
-        zk1: Joi.string().required(),
-        zk2: Joi.string().required(),
-        zk3: Joi.string().required(),
-    };
-    let err = Joi.validate(req.body, schema);
-    if (err.error != null) {
-        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID, err.error.message));
-    }
-    return res.send(result.Result({info: "ok"}));
-});
-
-//用户登录
+// 用户登录
 router.post('/login',function(req,res,next){
     let schema = {
         code: Joi.string().required(),
