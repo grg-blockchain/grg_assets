@@ -38,42 +38,36 @@ let queryAssetsList = function (expire_time, mobile, type, sp_id, assets_id, pag
 };
 
 
-let queryUserSpScoreStatus = function (user_mobile, sp_id, datetime, callback) {
-    if (datetime === "" || datetime === null) {
-        datetime = utils.getDatetime();
-    }
-
-    let result_data = {};
+let transferUserAsset = function (from_mobile, asset_id, to_mobile, callback) {
     async.waterfall([
         function (callback) {
-            let sql_str = "select t_sp_score_config.*, t_sp_info.simple_name " +
-                "from t_sp_score_config left join t_sp_info " +
-                "on t_sp_score_config.sp_id = t_sp_info.sp_id " +
-                "where t_sp_score_config.sp_id = ?";
-            let params = [sp_id];
+            let sql_str = "select * from t_node_user_assets where id = ? and mobile = ? and balance > 0";
+            let params = [asset_id, from_mobile];
             mysql.query(sql_str, params, function (err, data) {
                 if (err) {
                     return callback(result.err_code.ERR_DB_ERROR);
                 }
-                result_data.sp_info = data[0];
+                if (data.length == 0) {
+                    return callback(result.err_code.ERR_ASSET_IS_NOT_BELONG_YOU);
+                }
                 return callback(null, null);
             });
         },
         function (data, callback) {
-            queryList(user_mobile, sp_id, function (err, data) {
+            let sql_str = "update t_node_user_assets set mobile = ? where id = ? and mobile = ? and balance > 0";
+            let params = [to_mobile, asset_id, from_mobile];
+            mysql.query(sql_str, params, function (err, data) {
                 if (err) {
-                    return callback(err);
+                    return callback(result.err_code.ERR_DB_ERROR);
                 }
-                result_data.balance_list = data.balance_list;
-                result_data.balance = data.balance;
-                return callback(null, result_data);
+                return callback(null, null);
             });
         }
     ], function (err, data) {
         if (err) {
             return callback (err, null);
         }
-        return callback(err, result_data);
+        return callback(err, "");
     });
 };
 
@@ -99,6 +93,6 @@ let queryUserSpList = function (user_mobile, datetime, callback) {
 
 module.exports = {
     queryAssetsList,
-    queryUserSpScoreStatus,
+    transferUserAsset,
     queryUserSpList
 }

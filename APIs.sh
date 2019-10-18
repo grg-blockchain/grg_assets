@@ -119,7 +119,7 @@ post参数：
 
 
 3.3	用户端 - 查询自己持有的资产的列表
-url: /user_asset/query_assets_list
+url: /user_assets/query_assets_list
 post参数：
 -	type string 资产类型，选填（可选值：film）
 返回：
@@ -199,23 +199,11 @@ post参数：
 返回：
 无
 
-
-3.5	用户端 - 发起支付交易，支付资产给商户
-url: /user_trans/pay
+3.6	用户端 - 转赠资产
+url: /user_assets/transfer
 post参数：
 -	asset_id string 支付的资产id
--	payee_sp_id string '资产收款方商户id',
--	extern_info string '额外信息，用于存储外部商户对于该交易的描述',
--	pay_password string支付密码，用sha1和base64编码之后的值
--	query_time string 请求时间，"2019-07-17 00:00:00"
--	signature string签名，原文：asset_id 拼接 payee_sp_id 拼接 extern_info 拼接 pay_password 拼接 query_time，然后用key和iv加密，并sha1得到hash值。
-返回：无
-
-3.6	用户端 - 发起转赠交易
-url: /user_trans/transfer
-post参数：
--	asset_id string 支付的资产id
--	payee_user_mobile string '资产收款方用户手机号', 
+-	mobile string '资产收款方用户手机号', 
 -	extern_info string '额外信息，用于存储外部商户对于该交易的描述',
 -	pay_password string支付密码，用sha1和base64编码之后的值
 -	query_time string 请求时间，"2019-07-17 00:00:00"
@@ -529,8 +517,7 @@ output:
 3.15	用户端 – 商城 – 下架资产
 url: /mall/off_sale
 post参数：
--	off_sale_list array下架资产列表，数组，每个元素都有如下字段：
-asset_id string资产id
+-	off_sale_list json数组，每个元素都是一个asset_id。
 返回：无
 
 

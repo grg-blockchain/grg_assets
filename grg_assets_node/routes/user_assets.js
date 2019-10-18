@@ -27,6 +27,7 @@ router.post('/query_assets_list', function (req, res, next) {
         return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID, value.error.message));
     }
     req.body = value.value;
+
     let result_data = [];
     async.waterfall([
             function (callback) {
@@ -48,18 +49,28 @@ router.post('/query_assets_list', function (req, res, next) {
     );
 });
 
-router.post('/query_sp_score_config', function (req, res, next) {
-    if (req.body.sp_id === undefined) {
-        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID));
+router.post('/transfer', function (req, res, next) {
+    let schema = {
+        asset_id: Joi.string().required(),
+        mobile: Joi.string().required(),
+        extern_info: Joi.string().allow('').default(""),
+        pay_password: Joi.string().required(),
+        query_time: Joi.string().required(),
+        signature: Joi.string().required(),
+    };
+    let value = Joi.validate(req.body, schema);
+    if (value.error != null) {
+        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID, value.error.message));
     }
+    value = value.value;
+
     let result_data = {};
     async.waterfall([
         function (callback) {
-            assets.queryUserSpScoreStatus(req.session.mobile, req.body.sp_id, utils.getDatetime(), function (err, data) {
+            assets.transferUserAsset(req.session.mobile, value.asset_id, value.mobile, function (err, data) {
                 if (err) {
                     return callback(err, null);
                 }
-                result_data = data;
                 return callback(null, data);
             })
         }],
