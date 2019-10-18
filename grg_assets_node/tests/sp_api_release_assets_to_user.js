@@ -22,7 +22,7 @@ let params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "星际穿越",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({
@@ -39,7 +39,7 @@ let params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "星球大战-原力觉醒",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({
@@ -56,7 +56,7 @@ let params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "流浪地球",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({
@@ -73,7 +73,7 @@ let params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "霍比特人",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({
@@ -99,7 +99,7 @@ params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "星际穿越",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({
@@ -116,7 +116,7 @@ params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "星球大战-原力觉醒",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({
@@ -133,7 +133,7 @@ params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "流浪地球",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({
@@ -150,7 +150,7 @@ params = [
         mobile: "13661631812",
         sp_type: 0,
         name: "霍比特人",
-        assets_type:"film",
+        type:"film",
         balance: 1,
         expire_time: "2019-10-16 20:00:00",
         description: JSON.stringify({

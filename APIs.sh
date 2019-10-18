@@ -121,7 +121,7 @@ post参数：
 3.3	用户端 - 查询自己持有的资产的列表
 url: /user_asset/query_assets_list
 post参数：
--	assets_type string 资产类型，选填（可选值：film）
+-	type string 资产类型，选填（可选值：film）
 返回：
 	数组，每一个元素包含以下属性
 -	mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '用户手机号',
@@ -145,7 +145,7 @@ example:
 		"sp_id": "999",
 		"sp_type": 0,
 		"name": "星际穿越",
-		"assets_type": "film",
+		"type": "film",
 		"balance": 1,
 		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
 		"expire_time": "2019-10-16 20:00:00",
@@ -157,7 +157,7 @@ example:
 		"sp_id": "999",
 		"sp_type": 0,
 		"name": "星球大战-原力觉醒",
-		"assets_type": "film",
+		"type": "film",
 		"balance": 1,
 		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
 		"expire_time": "2019-10-16 20:00:00",
@@ -169,7 +169,7 @@ example:
 		"sp_id": "999",
 		"sp_type": 0,
 		"name": "流浪地球",
-		"assets_type": "film",
+		"type": "film",
 		"balance": 1,
 		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
 		"expire_time": "2019-10-16 20:00:00",
@@ -181,7 +181,7 @@ example:
 		"sp_id": "999",
 		"sp_type": 0,
 		"name": "霍比特人",
-		"assets_type": "film",
+		"type": "film",
 		"balance": 1,
 		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
 		"expire_time": "2019-10-16 20:00:00",
@@ -420,7 +420,7 @@ post参数：
 -	name： 资产名字，这里为电影名字
 -	balance int '资产余额',
 -	price float '资产价值',
--	assets_type string 资产类型（可选值：film）
+-	type string 资产类型（可选值：film）
 -	image_url string '资产的图标',
 -	expire_time datetime '过期时间',
 -	create_time datetime '创建时间',
@@ -439,7 +439,7 @@ output:
 				"sp_id": "999",
 				"sp_type": 0,
 				"name": "星际穿越",
-				"assets_type": "film",
+				"type": "film",
 				"balance": 1,
 				"description": {
 					"cinema": "广州百丽宫影城天环店",
@@ -463,9 +463,9 @@ output:
 3.13	用户端 – 商城 – 挂售资产
 url: /mall/sale
 post参数：
--	sale_list array 挂售资产列表，数组，每个元素都有如下字段：
-asset_id string资产id
-price string资产价格
+-	sale_list json数组 挂售资产列表，每个元素都有如下字段：
+		asset_id string资产id
+		price string资产价格
 返回：无
 
 3.14	用户端 – 商城 – 查询我挂售的资产
@@ -475,17 +475,56 @@ post参数：
 -	sp_type int '资产发行者，选填.【0】商户，sp_id中是商户id，【1】用户，sp_id中是用户手机号',
 返回：
 	数组，每一个元素包含以下属性
--	mobile string '用户手机号',
+
 -	sp_id string '发行商户的id',
--	assets_id string '资产id',
+-	sp_type int '资产发行者，选填.【0】商户，sp_id中是商户id，【1】用户，sp_id中是用户手机号',
+-	name string '资产名字，这里为电影名字', 
+-	type string 资产类型（可选值：film）
 -	balance int '资产余额',
 -	price float '资产价值',
--	desc string '资产说明',
--	type string资产类型（可选值：film）
--	icon_image_url string '资产的图标',
+-	description string '资产说明',
+-	image_url string '资产的图标',
 -	expire_time datetime '过期时间',
 -	create_time datetime '创建时间',
 -	update_time datetime '修改时间',
+example:
+input:
+{
+    sp_id: "13661631812",
+    sp_type: 1,
+}
+output:
+{
+	"error_code": 0,
+	"error_msg": ". ",
+	"result": [{
+		"id": 3,
+		"sp_id": "13661631812",
+		"sp_type": 1,
+		"name": "星际穿越",
+		"type": "film",
+		"balance": 1,
+		"price": 10,
+		"description": "{\"cinema\":\"飞扬影城天河城店\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
+		"image_url": "",
+		"expire_time": "2019-10-16 20:00:00",
+		"create_time": "2019-10-18 11:37:32",
+		"update_time": "2019-10-18 11:37:32"
+	}, {
+		"id": 4,
+		"sp_id": "13661631812",
+		"sp_type": 1,
+		"name": "星球大战-原力觉醒",
+		"type": "film",
+		"balance": 1,
+		"price": 20,
+		"description": "{\"cinema\":\"飞扬影城天河城店\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
+		"image_url": "",
+		"expire_time": "2019-10-16 20:00:00",
+		"create_time": "2019-10-18 11:37:32",
+		"update_time": "2019-10-18 11:37:32"
+	}]
+}
 
 3.15	用户端 – 商城 – 下架资产
 url: /mall/off_sale

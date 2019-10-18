@@ -36,7 +36,7 @@ router.post('/release_assets_to_user', function (req, res, next) {
         mobile: Joi.string().required(),
         sp_type: Joi.number().required(),
         name: Joi.string().required(),
-        assets_type: Joi.string().required(),
+        type: Joi.string().required(),
         balance: Joi.number().required(),
         expire_time: Joi.string().required(),
         description: Joi.string().required(),
@@ -47,9 +47,9 @@ router.post('/release_assets_to_user', function (req, res, next) {
     }
     value = value.value;
 
-    let sql_str = "insert into t_node_user_assets (mobile, sp_id, sp_type, name, assets_type, balance, description, expire_time) " +
+    let sql_str = "insert into t_node_user_assets (mobile, sp_id, sp_type, name, type, balance, description, expire_time) " +
         "values (?, ?, ?, ?, ?, ?, ?, ?)";
-    let params = [value.mobile, value.sp_id, value.sp_type, value.name, value.assets_type, value.balance, value.description, value.expire_time];
+    let params = [value.mobile, value.sp_id, value.sp_type, value.name, value.type, value.balance, value.description, value.expire_time];
     mysql.query(sql_str, params, function (err, data) {
         if (err) {
             logger.error(err);

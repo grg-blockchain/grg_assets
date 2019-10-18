@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/query_assets_list', function (req, res, next) {
     let schema = {
-        assets_type: Joi.string().default(""),
+        type: Joi.string().default(""),
         sp_id: Joi.string().default(""),
         assets_id: Joi.string().default(""),
         page: Joi.string().default(0),
@@ -30,7 +30,7 @@ router.post('/query_assets_list', function (req, res, next) {
     let result_data = [];
     async.waterfall([
             function (callback) {
-                assets.queryAssetsList(utils.getDatetime(), req.session.mobile, req.body.assets_type, req.body.sp_id, req.body.assets_id
+                assets.queryAssetsList(utils.getDatetime(), req.session.mobile, req.body.type, req.body.sp_id, req.body.assets_id
                 , req.body.page, req.body.count, function (err, data) {
                     if (err) {
                         return callback(err, null);

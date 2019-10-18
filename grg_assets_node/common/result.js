@@ -48,12 +48,16 @@ function Result() {
         ERR_USER_CONVERT_NOT_ENOUGH:        10301,
         ERR_SCORE_INVALID:                  10302,
 
+        ERR_ASSET_IS_NOT_BELONG_YOU:        10400,
+
         ERR_NO_MORE_TRANS_IN_BLOCK:         10900,
         ERR_NO_MORE_NEW_BLOCK:              10901,
         ERR_TRANS_INVALID:                  10902,
         ERR_NO_TRANS_EXIST:                 10903,
         ERR_NO_SP_USER_SCORE_EXIST:         10904,
         ERR_NO_MORE_RECORDS:                10905,
+
+
     };
 
     this.err_map = {};
@@ -109,7 +113,7 @@ function Result() {
     this.err_map[this.err_code.ERR_WECHAT_NEED_LOGIN_AGAIN]     = "需要重新登录微信。";
     this.err_map[this.err_code.ERR_WECHAT_ERR_CODE]             = "微信返回失败。";
 
-
+    this.err_map[this.err_code.ERR_ASSET_IS_NOT_BELONG_YOU]     = "资产不属于你，不能操作。";
 
     this.contract_err_code = [
         "NoError",              //成功标识

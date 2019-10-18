@@ -11,13 +11,13 @@ catch (e) {}
 var option = {
     host: test_config.host, //注意:不用协议部分(http://)
     port: test_config.port,
-    path: '/mall/sale_list', //斜杠开头
+    path: '/mall/off_sale', //斜杠开头
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'Cookie': cookie} //设置content-type 头部
 };
+off_sale_list  = [1,2];
 var data = {
-    sp_id: "13661631812",
-    sp_type: 1,
+    off_sale_list: JSON.stringify(off_sale_list)
 };
 
 

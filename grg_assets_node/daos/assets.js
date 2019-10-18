@@ -4,7 +4,7 @@ var async = require('async');
 var result = require('../common/result')();
 var utils = require('../common/utils');
 
-let queryAssetsList = function (expire_time, mobile, assets_type, sp_id, assets_id, page, count, callback) {
+let queryAssetsList = function (expire_time, mobile, type, sp_id, assets_id, page, count, callback) {
     let sql_str = "select * from t_node_user_assets where expire_time >= ? ";
     let params = [utils.getDatetime()];
 
@@ -12,9 +12,9 @@ let queryAssetsList = function (expire_time, mobile, assets_type, sp_id, assets_
         sql_str += "and mobile = ? ";
         params.push(mobile);
     }
-    if (assets_type != "") {
-        sql_str += "and assets_type = ? ";
-        params.push(assets_type);
+    if (type != "") {
+        sql_str += "and type = ? ";
+        params.push(type);
     }
     if (sp_id != "") {
         sql_str += "and sp_id = ? ";
