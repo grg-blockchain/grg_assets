@@ -22,7 +22,7 @@ router.post('/query_cinema', function (req, res, next) {
     if (value.error != null) {
         return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID, value.error.message));
     }
-    let sql_str = "select * from t_node_user_assets where name like '%" + value.value.film_name + "%'";
+    let sql_str = "select * from t_node_user_assets where balance > 0 and name like '%" + value.value.film_name + "%'";
     mysql.query(sql_str, [], function (err, data) {
         if (err) {
             logger.error(JSON.stringify(err));
@@ -44,29 +44,49 @@ router.post('/query_cinema', function (req, res, next) {
     });
 });
 
-router.post('/query_sp_score_config', function (req, res, next) {
-    if (req.body.sp_id === undefined) {
-        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID));
+router.post('/query_ticket', function (req, res, next) {
+    let schema = {
+        cinema_name: Joi.string().required(),
+        film_name: Joi.string().required(),
+    };
+    let value = Joi.validate(req.body, schema);
+    if (value.error != null) {
+        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID, value.error.message));
     }
-    let result_data = {};
-    async.waterfall([
-        function (callback) {
-            assets.queryUserSpScoreStatus(req.session.mobile, req.body.sp_id, utils.getDatetime(), function (err, data) {
-                if (err) {
-                    return callback(err, null);
-                }
-                result_data = data;
-                return callback(null, data);
-            })
-        }],
-        function (err, data) {
-            if (err) {
-                logger.error(err);
-                return res.send(result.Result({}, err));
-            }
-            return res.send(result.Result(result_data));
+    value = value.value;
+    let sql_str = "select * from t_node_user_assets where balance > 0 and name like '%" + value.film_name + "%'";
+    mysql.query(sql_str, [], function (err, data) {
+        if (err) {
+            logger.error(JSON.stringify(err));
+            return res.send(result.Result({}, result.err_code.ERR_DB_ERROR));
         }
-    );
+        let result_data = {};
+        for (let index in data) {
+            let film_desc = JSON.parse(data[index].description);
+            if ( value.cinema_name != film_desc.cinema) {
+                continue;
+            }
+
+            data[index].description = film_desc;
+            let time = data[index].description.time.split(" ");
+            let day = time[0].split("-");
+            day = day[1] + "月" + day[2] + "日";
+            if (!result_data.hasOwnProperty(day)) {
+                result_data[day] = {}
+            }
+
+            time = time[1].split(":");
+            time = time[0] + ":" + time[1];
+            if (!result_data[day].hasOwnProperty(time)) {
+                result_data[day][time] = [];
+            }
+
+            result_data[day][time].push(data[index]);
+        }
+
+
+        return res.send(result.Result(result_data));
+    });
 });
 
 module.exports = router;

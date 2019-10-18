@@ -107,6 +107,9 @@ module.exports = {
     getDatetime: function() {
         return moment().format('YYYY-MM-DD HH:mm:ss');
     },
+    getDatetimeForCN: function() {
+        return moment().format('YYYY年M月D日 HH时mm分ss秒');
+    },
     getTimeByDays: function(days) {
         return moment().add(days, 'days').format('YYYY-MM-DD HH:mm:ss');
     },

@@ -390,6 +390,8 @@ post参数：
 -	latitude string纬度
 -	address string影城地址
 example:
+input: film_name="星际穿越"
+output:
 {
 	"error_code": 0,
 	"error_msg": ". ",
@@ -408,21 +410,56 @@ example:
 3.12	用户端 – 电影 – 搜索电影票
 url: /film/query_ticket
 post参数：
--	cinema_id string影城id，选填
--	film_namestring电影名字，选填
+-	cinema_name string影城name
+-	film_name string电影名字
 返回：
 	数组，每一个元素包含以下属性
 -	mobile string '用户手机号',
 -	sp_id string '发行商户的id',
--	assets_id string '资产id',
+-	sp_type int '资产发行者，【0】商户，sp_id中是商户id，【1】用户，sp_id中是用户手机号',
+-	name： 资产名字，这里为电影名字
 -	balance int '资产余额',
 -	price float '资产价值',
--	desc string '资产说明',
--	type string 资产类型（可选值：film）
--	icon_image_url string '资产的图标',
+-	assets_type string 资产类型（可选值：film）
+-	image_url string '资产的图标',
 -	expire_time datetime '过期时间',
 -	create_time datetime '创建时间',
 -	update_time datetime '修改时间',
+example:
+input：cinema_name="广州百丽宫影城天环店", film_name="星际穿越"
+output:
+{
+	"error_code": 0,
+	"error_msg": ". ",
+	"result": {
+		"10月16日": {
+			"20:00": [{
+				"id": 9,
+				"mobile": "13661631812",
+				"sp_id": "999",
+				"sp_type": 0,
+				"name": "星际穿越",
+				"assets_type": "film",
+				"balance": 1,
+				"description": {
+					"cinema": "广州百丽宫影城天环店",
+					"address": "天河路天环广场地下一层",
+					"time": "2019-10-16 20:00:00",
+					"hall": "3D max厅",
+					"row": 5,
+					"seat": 10
+				},
+				"expire_time": "2019-10-16 20:00:00",
+				"create_time": "1970-01-01 00:00:00",
+				"update_time": "1970-01-01 00:00:00",
+				"price": 0,
+				"image_url": ""
+			}]
+		}
+	}
+}
+
+
 3.13	用户端 – 商城 – 挂售资产
 url: /mall/for_sale
 post参数：
