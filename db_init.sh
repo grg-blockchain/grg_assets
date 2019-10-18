@@ -268,19 +268,23 @@ mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not
 echo "create t_node_mall";
 mysql -h$host -u$mysql_user -p$mysql_passwd $mysql_db -s -e "create table if not exists t_node_mall (
 	id INT NOT NULL AUTO_INCREMENT COMMENT '自增id',
-	mobile VARCHAR(64) NOT NULL DEFAULT '' COMMENT '用户手机号',
-	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产所属商户的id',
-	assets_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产种类',
+	sp_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产发行者商户id',
+	sp_type INT(1) NOT NULL DEFAULT 0 COMMENT '资产发行者，【0】商户，sp_id中是商户id，【1】用户，sp_id中是用户手机号',
+	name VARCHAR(32) NOT NULL DEFAULT '' COMMENT '数字资产名字',
+	#assets_id VARCHAR(64) NOT NULL DEFAULT '' COMMENT '资产id',
+	assets_type VARCHAR(64) NOT NULL DEFAULT '' COMMENT '数字资产类型。【film】电影票',
 	balance INT NOT NULL DEFAULT 0 COMMENT '资产余额',
+	price INT NOT NULL DEFAULT 0 COMMENT '资产价值',
 	description TEXT COMMENT '资产说明',
+	image_url VARCHAR(256) NOT NULL DEFAULT '' COMMENT '资产图标url',
 
 	expire_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '过期时间',
 	create_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '创建时间',
 	update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '修改时间',
 
 	PRIMARY KEY (id),
-	UNIQUE INDEX  idx_expire_time_mobile_sp_id_assets_id (expire_time, mobile, sp_id, assets_id),
-	INDEX idx_sp_id (sp_id)
+	INDEX idx_expire_time_sp_id_sp_type (expire_time, sp_id, sp_type),
+	INDEX idx_expire_time_name(expire_time, name)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 ";
 

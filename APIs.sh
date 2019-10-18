@@ -461,7 +461,7 @@ output:
 
 
 3.13	用户端 – 商城 – 挂售资产
-url: /mall/for_sale
+url: /mall/sale
 post参数：
 -	sale_list array 挂售资产列表，数组，每个元素都有如下字段：
 asset_id string资产id
@@ -471,7 +471,8 @@ price string资产价格
 3.14	用户端 – 商城 – 查询我挂售的资产
 url: /mall/sale_list
 post参数：
-	无
+-	sp_id string '发行商户的id，选填'
+-	sp_type int '资产发行者，选填.【0】商户，sp_id中是商户id，【1】用户，sp_id中是用户手机号',
 返回：
 	数组，每一个元素包含以下属性
 -	mobile string '用户手机号',
