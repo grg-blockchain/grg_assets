@@ -119,7 +119,7 @@ post参数：
 
 
 3.3	用户端 - 查询自己持有的资产的列表
-url: /user_asset/query_asset_list
+url: /user_asset/query_assets_list
 post参数：
 -	assets_type string 资产类型，选填（可选值：film）
 返回：
@@ -140,25 +140,54 @@ example:
 	"error_code": 0,
 	"error_msg": ". ",
 	"result": [{
-			"id": 28,
-			"mobile": "15177317536",
-			"sp_id": "1000000000",
-			"asset": 10,
-			"expire_time": "2020-07-31 23:59:59",
-			"create_time": "2019-07-04 09:36:42",
-			"update_time": "2019-07-04 09:36:42",
-			"balance": 10
-		}, {
-			"id": 29,
-			"mobile": "15177317536",
-			"sp_id": "1000000001",
-			"asset": 60,
-			"expire_time": "2020-07-31 23:59:59",
-			"create_time": "2019-07-04 09:36:42",
-			"update_time": "2019-07-04 09:36:42",
-			"balance": 60,
-		}
-	]
+		"id": 1,
+		"mobile": "13661631812",
+		"sp_id": "999",
+		"sp_type": 0,
+		"name": "星际穿越",
+		"assets_type": "film",
+		"balance": 1,
+		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
+		"expire_time": "2019-10-16 20:00:00",
+		"create_time": "1970-01-01 00:00:00",
+		"update_time": "1970-01-01 00:00:00"
+	}, {
+		"id": 2,
+		"mobile": "13661631812",
+		"sp_id": "999",
+		"sp_type": 0,
+		"name": "星球大战-原力觉醒",
+		"assets_type": "film",
+		"balance": 1,
+		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
+		"expire_time": "2019-10-16 20:00:00",
+		"create_time": "1970-01-01 00:00:00",
+		"update_time": "1970-01-01 00:00:00"
+	}, {
+		"id": 3,
+		"mobile": "13661631812",
+		"sp_id": "999",
+		"sp_type": 0,
+		"name": "流浪地球",
+		"assets_type": "film",
+		"balance": 1,
+		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
+		"expire_time": "2019-10-16 20:00:00",
+		"create_time": "1970-01-01 00:00:00",
+		"update_time": "1970-01-01 00:00:00"
+	}, {
+		"id": 4,
+		"mobile": "13661631812",
+		"sp_id": "999",
+		"sp_type": 0,
+		"name": "霍比特人",
+		"assets_type": "film",
+		"balance": 1,
+		"description": "{\"cinema\":\"飞扬影城\",\"address\":\"天河城三楼\",\"time\":\"2019-10-16 20:00:00\",\"hall\":\"3D max厅\",\"row\":5,\"seat\":10}",
+		"expire_time": "2019-10-16 20:00:00",
+		"create_time": "1970-01-01 00:00:00",
+		"update_time": "1970-01-01 00:00:00"
+	}]
 }
 	
 3.4	用户端 - 设置支付密码
@@ -248,8 +277,8 @@ post参数：
 -	from_time string 开始时间，选填
 -	to_time string 结束时间，选填
 -	sp_id string 商户id，选填
--	type int 【1】给用户发放资产【2】用户消费资产【3】商户代扣用户消费资产【4】用户转赠资产'，选填
--	state int '交易结果：【0】交易失败，【1】交易成功'，选填
+-	type int '【1】给用户发放资产【2】用户消费资产【3】商户代扣用户消费资产【4】用户转赠资产，选填'
+-	state int '交易结果：【0】交易失败，【1】交易成功，选填'
 	
 返回：
 {
@@ -276,36 +305,105 @@ url: 二维码中包含一串json格式的字符串：
 url: /mall/index
 post参数：
 返回：
-	banners数组中包含n个元素，每个元素里包含：
+banners 数组中包含n个元素，每个元素里包含：
 -	img_url: string 图片地址
 -	query_url: string 点击图片后请求的地址
 -	desc string 描述,
 
-new_assets数组中包含n个元素，每个元素里包含：
+new_assets 数组中包含n个元素，每个元素里包含：
 -	img_url: string图片地址
 -	query_url: string点击图片后请求的地址
 -	desc string描述,
 
-hot_assets数组中包含n个元素，每个元素里包含：
+hot_assets 数组中包含n个元素，每个元素里包含：
 -	img_url: string图片地址
 -	query_url: string点击图片后请求的地址
 -	desc string描述,
+example:
+{
+	"error_code": 0,
+	"error_msg": ". ",
+	"result": {
+		"banners": [{
+			"img_url": "images/f1.jpg",
+			"query_url": "",
+			"desc": "星际穿越"
+		}, {
+			"img_url": "images/f2.jpg",
+			"query_url": "",
+			"desc": "星球大战-原力觉醒"
+		}, {
+			"imgs/f3.jpg",
+			"query_url": "",
+			"desc": "流浪地球"
+		}, {
+			"img_url": "images/f4.jpg",
+			"query_url": "",
+			"desc": "霍比特人"
+		}],
+		"new_assets": [{
+			"img_url": "images/f1.jpg",
+			"query_url": "",
+			"desc": "星际穿越"
+		}, {
+			"img_url": "images/fy_url": "",
+			"desc": "星球大战-原力觉醒"
+		}, {
+			"img_url": "images/f3.jpg",
+			"query_url": "",
+			"desc": "流浪地球"
+		}, {
+			"img_url": "images/f4.jpg",
+			"query_url": "",
+			"desc": "霍比特人"
+		}],
+		"hot_assets": [{
+			"img_url": "images/f1.jpg"
+			"desc": "星际穿越"
+		}, {
+			"img_url": "images/f2.jpg",
+			"query_url": "",
+			"desc": "星球大战-原力觉醒"
+		}, {
+			"img_url": "images/f3.jpg",
+			"query_url": "",
+			"desc": "流浪地球"
+		}, {
+			"img_url": "images/f4.jpg",
+			"query_url": "",
+			"desc": "霍比特人"
+		}]
+	}
+}
 
 3.11	用户端 – 电影 – 搜索影城
 url: /film/query_cinema
 post参数：
--	longitude string经度，选填
--	latitude string纬度，选填
+-	longitude string经度，选填（未实现）
+-	latitude string纬度，选填（未实现）
 -	film_name string电影名字，选填
 返回：
-	返回数组，每个元素包含如下字段：
+	返回map，key：
 -	cinema_id string影城id
 -	cinema_name string影城名字
 -	longitude string经度
 -	latitude string纬度
 -	address string影城地址
--	scene string场次（没有电影名字的话就为空）
--	price float起始价格（没有电影名字的话就为空）
+example:
+{
+	"error_code": 0,
+	"error_msg": ". ",
+	"result": {
+		"飞扬影城天河城店": {
+			"address": "天河城三楼",
+			"assets_id": [5]
+		},
+		"广州百丽宫影城天环店": {
+			"address": "天河路天环广场地下一层",
+			"assets_id": [9]
+		}
+	}
+}
 
 3.12	用户端 – 电影 – 搜索电影票
 url: /film/query_ticket

@@ -5,31 +5,26 @@ var result = require('../common/result')();
 var utils = require('../common/utils');
 
 let queryAssetsList = function (expire_time, mobile, assets_type, sp_id, assets_id, page, count, callback) {
-    let result_list = {};
-
-    let sql_str = "select balance.* from t_node_user_balance as balance " +
-        "left join t_sp_assets as assets " +
-        "on balance.assets_id = assets.id and balance.assets_type = assets.type " +
-        "where balance.expire_time >= ? ";
+    let sql_str = "select * from t_node_user_assets where expire_time >= ? ";
     let params = [utils.getDatetime()];
 
     if (mobile != "") {
-        sql_str += "and balance.mobile = ? ";
+        sql_str += "and mobile = ? ";
         params.push(mobile);
     }
     if (assets_type != "") {
-        sql_str += "and balance.assets_type = ? ";
+        sql_str += "and assets_type = ? ";
         params.push(assets_type);
     }
     if (sp_id != "") {
-        sql_str += "and balance.sp_id = ? ";
+        sql_str += "and sp_id = ? ";
         params.push(sp_id);
     }
     if (assets_id != "") {
-        sql_str += "and balance.assets_id = ? ";
+        sql_str += "and assets_id = ? ";
         params.push(assets_id);
     }
-    sql_str += "and balance.balance > 0 limit ?,?;";
+    sql_str += "and balance > 0 limit ?,?;";
     params.push(page*count);
     params.push(count);
 
@@ -38,8 +33,7 @@ let queryAssetsList = function (expire_time, mobile, assets_type, sp_id, assets_
             logger.error(JSON.stringify(err))
             return callback(result.err_code.ERR_DB_ERROR);
         }
-        result_list.assets_list = data;
-        return callback(null, result_list);
+        return callback(null, data);
     });
 };
 

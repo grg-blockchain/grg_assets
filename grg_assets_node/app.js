@@ -80,7 +80,8 @@ app.use('/user_assets', require('./routes/user_assets'));
 app.use('/user_trans', require('./routes/user_trans'));
 app.use('/wechat', require('./routes/wechat'));
 app.use('/sp_api', require('./routes/sp_api'));
-
+app.use('/mall', require('./routes/mall'));
+app.use('/film', require('./routes/film'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

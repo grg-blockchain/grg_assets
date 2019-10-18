@@ -11,101 +11,75 @@ let redis = require('../common/redis');
 const Joi = require("joi");
 // require("joi-router")
 
-// 用户登录
-router.post('/login',function(req,res,next){
-    let schema = {
-        code: Joi.string().required(),
-    };
-    let err = Joi.validate(req.body, schema);
-    if (err.error != null) {
-        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID, err.error.message));
-    }
-
-    let result_data;
-    let wechat_session = null;
-    logger.info("wxlogin: accept request",req.body.code);
-    async.waterfall([
-        function(callback) {
-
-            let appId = config.third_account.wechat.app_id;
-            let secret = config.third_account.wechat.secret;
-            let js_code = req.body.code;
-            let url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appId}&secret=${secret}&js_code=${js_code}&grant_type=authorization_code` ;
-
-            httpclient.doGet(url, function (err, data) {
-                if(err){
-                    logger.error("query veixin to get user oppenid failed: " + err)
-                    return callback(err, err.message);
-                }
-                logger.info("query veixin to get user oppenid success: " + data);
-
-                data = JSON.parse(data);
-                if (data.errcode !== undefined && data.errcode !== 0){
-                    return callback(result.err_code.ERR_WECHAT_ERR_CODE, data.errmsg);
-                }
-
-                wechat_session = data;
-                callback(null, null);
-            });
-        },
-        function (data, callback) {
-            let sql_str = "insert into t_node_user_openid_info (type, openid, session_key, mobile, info) values (?, ?, ?, ?, ?) " +
-                "on duplicate key update session_key = ?; ";
-            let params = [1, wechat_session.openid, wechat_session.session_key, '', '', wechat_session.session_key];
-            mysql.query(sql_str, params, function (err, data) {
-                if (err) {
-                    logger.error(err);
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-                let key = utils.randomString(16);
-                let iv = utils.randomString(16);
-
-                // key = new Buffer(key).toString("base64");
-                // iv = new Buffer(iv).toString("base64");
-
-                key = Buffer.from(key).toString("base64");
-                iv = Buffer.from(iv).toString("base64");
-
-                req.session.regenerate(function (err) {
-                    if (err) {
-                        logger.error(err);
-                        return res.send(result.Result({}, result.err_code.ERR_SESSION_SERVER_ERROR));
-                    }
-                    req.session.wechat_session = wechat_session;
-                    req.session.key = key;
-                    req.session.iv = iv;
-                    result_data = {session_id: req.session.id, key: key, iv: iv};
-                    return callback(null, null);
-                });
-            });
-        },
-        function (data, callback) {
-            // 检测是否有支付密码，以及拿到手机号。
-            let sql_str = "select t_node_user_account.* " +
-                "from t_node_user_openid_info left join t_node_user_account " +
-                "on t_node_user_openid_info.mobile = t_node_user_account.mobile " +
-                "where t_node_user_openid_info.type = ? and t_node_user_openid_info.openid = ? and t_node_user_openid_info.mobile != ''";
-            let params = [1, wechat_session.openid];
-            mysql.query(sql_str, params, function (err, data) {
-                if (err) {
-                    logger.error(err);
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-
-                result_data.need_set_pay_password = (data.length === 0 || data[0].pay_password === "")? 1: 0;
-                result_data.need_set_mobile = (data.length === 0 || data[0].mobile === "")? 1: 0;
-
-                return callback(null, null);
-            });
-        }
-    ],function(err, data){
-        if(err){
-            logger.error(err, data);
-            return res.send(result.Result({}, err, data));
-        }
-        return res.send(result.Result(result_data));
-    });
-
+router.post('/index',function(req,res,next){
+    return res.send(result.Result({
+        banners: [
+            {
+                img_url: "images/f1.jpg",
+                query_url: "",
+                desc: "星际穿越",
+            },
+            {
+                img_url: "images/f2.jpg",
+                query_url: "",
+                desc: "星球大战-原力觉醒",
+            },
+            {
+                img_url: "images/f3.jpg",
+                query_url: "",
+                desc: "流浪地球",
+            },
+            {
+                img_url: "images/f4.jpg",
+                query_url: "",
+                desc: "霍比特人",
+            },
+        ],
+        new_assets: [
+            {
+                img_url: "images/f1.jpg",
+                query_url: "",
+                desc: "星际穿越",
+            },
+            {
+                img_url: "images/f2.jpg",
+                query_url: "",
+                desc: "星球大战-原力觉醒",
+            },
+            {
+                img_url: "images/f3.jpg",
+                query_url: "",
+                desc: "流浪地球",
+            },
+            {
+                img_url: "images/f4.jpg",
+                query_url: "",
+                desc: "霍比特人",
+            },
+        ],
+        hot_assets: [
+            {
+                img_url: "images/f1.jpg",
+                query_url: "",
+                desc: "星际穿越",
+            },
+            {
+                img_url: "images/f2.jpg",
+                query_url: "",
+                desc: "星球大战-原力觉醒",
+            },
+            {
+                img_url: "images/f3.jpg",
+                query_url: "",
+                desc: "流浪地球",
+            },
+            {
+                img_url: "images/f4.jpg",
+                query_url: "",
+                desc: "霍比特人",
+            },
+        ],
+    }));
 });
 
 router.post('/register_info',function(req, res, next){

@@ -11,104 +11,12 @@ let utils = require('../common/utils');
 let score = require('../daos/assets');
 let trans = require('../daos/trans');
 let redis = require('../common/redis');
+const Joi = require("joi");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
-
-function releaseScoreToUser (sp_id, mobile, score, state_msg, next) {
-    let mysql_connection = null;
-    let sp_score_config = null;
-    let datetime = utils.getDatetime();
-
-    async.waterfall([
-        function (callback) {
-            mysql.getConnection(function (error, connection) {
-                if(error) {
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-                mysql_connection = connection;
-                return callback(null, null);
-            });
-        },
-        function (data, callback) {
-            mysql_connection.beginTransaction(function (error) {
-                if (error) {
-                    logger.error("start transaction failed.");
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-                return callback(null, null);
-            });
-        },
-        function (data, callback) {
-            let sql_str = "select * from t_sp_score_config where sp_id = ?";
-            mysql_connection.query(sql_str, [sp_id], function (err, data) {
-                if (err) {
-                    logger.error(JSON.stringify(err));
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-                if (data.length === 0) {
-                    return callback(result.err_code.ERR_SP_SCORE_CONFIG_NOT_EXIST)
-                }
-                sp_score_config = data[0];
-                return callback(null, null)
-            })
-        },
-        function (data, callback) {
-            let sql_str = "update t_node_sp_balance set score = score - ?, update_time = ? " +
-                "where sp_id = ? and score >= ?";
-            let params = [score, datetime, sp_id, score];
-            mysql_connection.query(sql_str, params, function (err, data) {
-                if (err) {
-                    logger.error(JSON.stringify(err));
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-                if (data.affectedRows === 0) {
-                    logger.error("update t_node_sp_balance for sp_id = " + sp_id + "but affected rows is " + data.affectedRows);
-                    return callback(result.err_code.ERR_BALANCE_NOT_ENOUGH);
-                }
-
-                return callback(null, null);
-            });
-        },
-        function (data, callback) {
-            let expire_datetime = utils.getFloorUpMonthDatetimeAfter(sp_score_config.score_expiration);
-            let sql_str = "insert into t_node_user_balance (mobile, sp_id, score, expire_time, create_time, update_time) " +
-                "value (?, ?, ?, ?, ?, ?) " +
-                "on duplicate key update score = score + ?, update_time = ?; ";
-            let params = [mobile, sp_id, score, expire_datetime, datetime, datetime,
-                score, datetime];
-            mysql_connection.query(sql_str, params, function (err, data) {
-                if (err) {
-                    logger.error(JSON.stringify(err));
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-                return callback(null, null);
-            });
-        },
-        function (data, callback) {
-            let sql_str = "insert into t_node_score_trans (payer_sp_id, payee_user_mobile, score, type, state_msg, create_time, update_time)" +
-                "value (?, ?, ?, ?, ?, ?, ?);";
-            let params = [sp_id, mobile, score, 1, state_msg, datetime, datetime];
-            mysql_connection.query(sql_str, params, function (err, data) {
-                if (err) {
-                    logger.error(JSON.stringify(err));
-                    return callback(result.err_code.ERR_DB_ERROR);
-                }
-                return callback(null, null);
-            });
-        }
-    ], function (err, data) {
-        if (err) {
-            mysql.transFailed(mysql_connection);
-            return next(err, null);
-        }
-
-        mysql.transSuccess(mysql_connection);
-        return next(null, {})
-    });
-}
 
 function checkSpSignature (sp_id, data, signature, callback) {
     sp.queryInfo(sp_id,  function (err, sp_info) {
@@ -122,26 +30,48 @@ function checkSpSignature (sp_id, data, signature, callback) {
     });
 
 }
-router.post('/release_score_to_user', function (req, res, next) {
-    if (req.body.sp_id === undefined || req.body.mobile === undefined ||
-        req.body.score === undefined || req.body.query_time === undefined) {
-        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID));
+router.post('/release_assets_to_user', function (req, res, next) {
+    let schema = {
+        sp_id: Joi.string().required(),
+        mobile: Joi.string().required(),
+        sp_type: Joi.number().required(),
+        name: Joi.string().required(),
+        assets_type: Joi.string().required(),
+        balance: Joi.number().required(),
+        expire_time: Joi.string().required(),
+        description: Joi.string().required(),
+    };
+    let value = Joi.validate(req.body, schema);
+    if (value.error != null) {
+        return res.send(result.Result({}, result.err_code.ERR_PARAMS_INVALID, value.error.message));
     }
-    let state_msg = req.body.state_msg || "";
-    async.waterfall([
-        function (callback) {
-            let data = "" + req.body.sp_id + req.body.mobile + req.body.score + req.body.query_time;
-            return checkSpSignature(req.body.sp_id, data, req.body.signature, callback);
-        },
-        function (data, callback) {
-            releaseScoreToUser(req.body.sp_id, req.body.mobile, req.body.score, state_msg, callback);
-        }
-    ], function (err, data) {
+    value = value.value;
+
+    let sql_str = "insert into t_node_user_assets (mobile, sp_id, sp_type, name, assets_type, balance, description, expire_time) " +
+        "values (?, ?, ?, ?, ?, ?, ?, ?)";
+    let params = [value.mobile, value.sp_id, value.sp_type, value.name, value.assets_type, value.balance, value.description, value.expire_time];
+    mysql.query(sql_str, params, function (err, data) {
         if (err) {
-            return res.send(result.Result({}, err));
+            logger.error(err);
+            return res.send(result.Result({}, result.err_code.ERR_DB_ERROR));
         }
-        return res.send(result.Result(data));
+        return res.send(result.Result({}));
     });
+
+    // async.waterfall([
+    //     function (callback) {
+    //         let data = "" + req.body.sp_id + req.body.mobile + req.body.score + req.body.query_time;
+    //         return checkSpSignature(req.body.sp_id, data, req.body.signature, callback);
+    //     },
+    //     function (data, callback) {
+    //
+    //     }
+    // ], function (err, data) {
+    //     if (err) {
+    //         return res.send(result.Result({}, err));
+    //     }
+    //     return res.send(result.Result(data));
+    // });
 });
 
 router.post('/release_score_to_user_by_cr', function (req, res, next) {
