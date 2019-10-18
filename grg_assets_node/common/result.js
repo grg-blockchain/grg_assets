@@ -49,6 +49,8 @@ function Result() {
         ERR_SCORE_INVALID:                  10302,
 
         ERR_ASSET_IS_NOT_BELONG_YOU:        10400,
+        ERR_ASSET_IS_NOT_EXIST:             10401,
+        ERR_ASSET_IS_BELONG_YOU:            10402,
 
         ERR_NO_MORE_TRANS_IN_BLOCK:         10900,
         ERR_NO_MORE_NEW_BLOCK:              10901,
@@ -114,6 +116,8 @@ function Result() {
     this.err_map[this.err_code.ERR_WECHAT_ERR_CODE]             = "微信返回失败。";
 
     this.err_map[this.err_code.ERR_ASSET_IS_NOT_BELONG_YOU]     = "资产不属于你，不能操作。";
+    this.err_map[this.err_code.ERR_ASSET_IS_NOT_EXIST]          = "资产不存在";
+    this.err_map[this.err_code.ERR_ASSET_IS_BELONG_YOU]         = "资产本来就属于你的";
 
     this.contract_err_code = [
         "NoError",              //成功标识

@@ -199,6 +199,12 @@ post参数：
 返回：
 无
 
+3.5 用户端 - 下单
+url: /user_assets/post_order
+post参数：
+-	assets_list json数组，购买的资产列表，每个元素是asset_id
+返回：无
+
 3.6	用户端 - 转赠资产
 url: /user_assets/transfer
 post参数：

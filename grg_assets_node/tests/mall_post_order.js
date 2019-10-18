@@ -11,22 +11,13 @@ catch (e) {}
 var option = {
     host: test_config.host, //注意:不用协议部分(http://)
     port: test_config.port,
-    path: '/mall/sale', //斜杠开头
+    path: '/mall/post_order', //斜杠开头
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'Cookie': cookie} //设置content-type 头部
 };
-sale_list  = [
-    {
-        asset_id: 8,
-        price: 10,
-    },
-    {
-        asset_id: 9,
-        price: 20,
-    }
-];
+assets_list  = [7,8];
 var data = {
-    sale_list: JSON.stringify(sale_list)
+    assets_list: JSON.stringify(assets_list)
 };
 
 
